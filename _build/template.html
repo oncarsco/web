@@ -191,7 +191,7 @@ footer{border-top:1px solid var(--line);padding:32px 0 40px;color:var(--dim);fon
 .foot nav{display:flex;gap:18px;flex-wrap:wrap}
 .foot a{text-decoration:none}
 .foot a:hover{color:var(--text)}
-.fbtn{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:30;display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:999px;border:1px solid var(--accent);background:var(--surface-2);color:var(--text);font:inherit;font-weight:600;font-size:15px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.fbtn{position:fixed;left:50%;top:80px;transform:translateX(-50%);z-index:30;display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:999px;border:1px solid var(--accent);background:var(--surface-2);color:var(--text);font:inherit;font-weight:600;font-size:15px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.5)}
 .fbtn svg{color:var(--accent)}
 .fbtn b{background:var(--accent);color:var(--accent-ink);border-radius:999px;font-size:12px;min-width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;padding:0 6px}
 .fsheet{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center}
@@ -512,7 +512,7 @@ addEventListener('scroll',spy,{passive:true});addEventListener('resize',spy);spy
 (()=>{const fb=$('#fbox'),home=fb.parentNode,anchor=fb.nextSibling,btn=$('#fbtn'),sh=$('#fsheet'),grid=$('#grid'),sec=$('#carros');let open=false;
 const nAct=()=>['#q','#marca','#precio','#trans'].filter(s=>$(s).value).length+(tipo?1:0);
 const sync=()=>{const n=nAct();$('#fnum').hidden=!n;$('#fnum').textContent=n;const c=$('#count b');$('#fsok').textContent=c?('Ver '+c.textContent+(c.textContent==='1'?' carro':' carros')):'Ver carros';$('#fsclear').hidden=!n};
-const vis=()=>{if(open)return;const g=grid.getBoundingClientRect(),f=fb.getBoundingClientRect(),s2=sec.getBoundingClientRect();btn.hidden=!(f.bottom<70&&s2.bottom>innerHeight*.45)};
+const vis=()=>{if(open)return;btn.style.top=(document.querySelector('header').getBoundingClientRect().bottom+10)+'px';const g=grid.getBoundingClientRect(),f=fb.getBoundingClientRect(),s2=sec.getBoundingClientRect();btn.hidden=!(f.bottom<document.querySelector('header').getBoundingClientRect().bottom&&s2.bottom>innerHeight*.45)};
 const show=()=>{open=true;$('#fsbody').appendChild(fb);sh.hidden=false;btn.hidden=true;btn.setAttribute('aria-expanded','true');document.body.classList.add('fs-open');sync();setTimeout(()=>$('.fs-x').focus(),30)};
 const hide=()=>{if(!open)return;open=false;home.insertBefore(fb,anchor);sh.hidden=true;btn.setAttribute('aria-expanded','false');document.body.classList.remove('fs-open');$('.count').scrollIntoView({behavior:'smooth',block:'start'});setTimeout(vis,600)};
 btn.addEventListener('click',show);sh.addEventListener('click',e=>{if(e.target.closest('[data-close]'))hide()});
