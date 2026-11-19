@@ -17,7 +17,8 @@ ld={"@context":"https://schema.org","@graph":[
   "address":{"@type":"PostalAddress","addressLocality":"Medellín","addressRegion":"Antioquia","addressCountry":"CO"},
   "areaServed":[{"@type":"City","name":"Medellín"},{"@type":"AdministrativeArea","name":"Valle de Aburrá"}],
   "contactPoint":{"@type":"ContactPoint","telephone":"+57 316 627 9204","contactType":"sales","availableLanguage":"es"},
-  "sameAs":["https://www.mercadolibre.com.co/pagina/oncarscolombia","https://www.instagram.com/oncars.co/","https://www.tiktok.com/@oncars.co"],
+  "sameAs":["https://www.mercadolibre.com.co/pagina/oncarscolombia","https://www.instagram.com/oncars.co/","https://www.tiktok.com/@oncars.co","https://maps.app.goo.gl/oDvahX1icmHbk4XJ8"],
+  "hasMap":"https://maps.app.goo.gl/oDvahX1icmHbk4XJ8",
   "hasOfferCatalog":{"@type":"OfferCatalog","name":"Asesoría de compra de carro","itemListElement":[
    {"@type":"Offer","name":n,"price":pr,"priceCurrency":"COP","itemOffered":{"@type":"Service","name":n,"description":d,"areaServed":"Medellín"}}
    for n,pr,d in [("Revisión de un carro",200000,"Revisión de precio e informe de historial vehicular (reclamaciones, accidentes, propietarios, RUNT, SIMIT, multas y prenda) de un carro que ya encontraste."),
