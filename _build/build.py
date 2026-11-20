@@ -9,6 +9,12 @@ for c in out: assert os.path.exists(R+c['foto']),'falta foto '+c['foto']
 upd=sys.argv[1]
 t=open(B+'template.html').read().replace('/*CARS*/[]',json.dumps(out,ensure_ascii=False)).replace('/*UPDATED*/',upd)
 SITE='https://oncarsco.com/'
+# Entrega: en Medellín se entrega sin costo; a otras ciudades se lleva y el traslado lo paga el comprador (costo variable, no se publica tarifa).
+SHIP={"@type":"OfferShippingDetails","shippingDestination":{"@type":"DefinedRegion","addressCountry":"CO","addressRegion":"ANT"},
+      "shippingRate":{"@type":"MonetaryAmount","value":0,"currency":"COP"},
+      "deliveryTime":{"@type":"ShippingDeliveryTime","handlingTime":{"@type":"QuantitativeValue","minValue":0,"maxValue":3,"unitCode":"DAY"},"transitTime":{"@type":"QuantitativeValue","minValue":0,"maxValue":1,"unitCode":"DAY"}}}
+# Venta definitiva: después de la entrega no se aceptan devoluciones.
+RET={"@type":"MerchantReturnPolicy","applicableCountry":"CO","returnPolicyCategory":"https://schema.org/MerchantReturnNotPermitted"}
 faq=json.load(open(B+'faq.json'))
 ld={"@context":"https://schema.org","@graph":[
  {"@type":"AutoDealer","@id":SITE+"#oncars","name":"OnCars","alternateName":"OnCars Concesionario virtual","url":SITE,"logo":SITE+"img/logo.png","image":SITE+"img/og.jpg",
@@ -30,7 +36,7 @@ ld={"@context":"https://schema.org","@graph":[
     "model":c['modelo'],"vehicleModelDate":str(c['anio']),"mileageFromOdometer":{"@type":"QuantitativeValue","value":c['km'],"unitCode":"KMT"},
     "vehicleTransmission":c.get('trans'),"fuelType":c.get('comb'),"bodyType":c.get('tipo'),"itemCondition":"https://schema.org/UsedCondition",
     "image":SITE+c['foto'],"url":c['url'],
-    "offers":{"@type":"Offer","price":c['precio'],"priceCurrency":"COP","availability":"https://schema.org/InStock","url":c['url'],"seller":{"@id":SITE+"#oncars"}}}}
+    "offers":{"@type":"Offer","price":c['precio'],"priceCurrency":"COP","availability":"https://schema.org/InStock","url":c['url'],"seller":{"@id":SITE+"#oncars"},"shippingDetails":SHIP,"hasMerchantReturnPolicy":RET}}}
    for i,c in enumerate(sorted(out,key=lambda c:-c['orden']))]},
  {"@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in faq]}
 ]}
