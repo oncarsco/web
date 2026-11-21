@@ -1,19 +1,5 @@
 [
  {
-  "id": "MCO-2386141961",
-  "marca": "Toyota",
-  "modelo": "Corolla 1.8 Se-g",
-  "anio": 2023,
-  "km": 27500,
-  "precio": 104900000,
-  "tipo": "Automóvil",
-  "comb": "Híbrido",
-  "trans": "Automática",
-  "url": "https://carro.mercadolibre.com.co/MCO-2386141961-toyota-corolla-18-se-g-_JM",
-  "foto": "fotos/hq/MCO-2386141961.jpg",
-  "orden": 20261119
- },
- {
   "id": "MCO-2334342135",
   "marca": "Kia",
   "modelo": "Sportage 2.0 Vibrant 4x2 Aut",
@@ -131,7 +117,7 @@
   "modelo": "Tahoe 5.3 V8 Z71 4wd At",
   "anio": 2022,
   "km": 50000,
-  "precio": 239000000,
+  "precio": 229000000,
   "tipo": "SUV / Camioneta",
   "comb": "Gasolina",
   "trans": "Automática",
@@ -152,20 +138,6 @@
   "url": "https://carro.mercadolibre.com.co/MCO-2352186539-bmw-x1-20-f48-sdrive-18d-_JM",
   "foto": "fotos/hq/MCO-2352186539.jpg",
   "orden": 20261106
- },
- {
-  "id": "MCO-4650213112",
-  "marca": "Suzuki",
-  "modelo": "Fronx 1.5 Glx Aut Hibrida",
-  "anio": 2025,
-  "km": 8100,
-  "precio": 84900000,
-  "tipo": "SUV / Camioneta",
-  "comb": "Híbrido ligero",
-  "trans": "Automática",
-  "url": "https://carro.mercadolibre.com.co/MCO-4650213112-suzuki-fronx-15-glx-aut-hibrida-_JM",
-  "foto": "fotos/hq/MCO-4650213112.jpg",
-  "orden": 20261118
  },
  {
   "id": "MCO-2215722325",
@@ -252,6 +224,20 @@
   "orden": 20261023
  },
  {
+  "id": "MCO-2386141961",
+  "marca": "Toyota",
+  "modelo": "Corolla 1.8 Se-g",
+  "anio": 2023,
+  "km": 27500,
+  "precio": 104900000,
+  "tipo": "Automóvil",
+  "comb": "Híbrido",
+  "trans": "Automática",
+  "url": "https://carro.mercadolibre.com.co/MCO-2386141961-toyota-corolla-18-se-g-_JM",
+  "foto": "fotos/hq/MCO-2386141961.jpg",
+  "orden": 20261119
+ },
+ {
   "id": "MCO-4471199896",
   "marca": "Chevrolet",
   "modelo": "Equinox 1.5 Premier",
@@ -264,6 +250,20 @@
   "url": "https://carro.mercadolibre.com.co/MCO-4471199896-chevrolet-equinox-15-premier-_JM",
   "foto": "fotos/hq/MCO-4471199896.jpg",
   "orden": 20260923
+ },
+ {
+  "id": "MCO-4650213112",
+  "marca": "Suzuki",
+  "modelo": "Fronx 1.5 Glx Aut Hibrida",
+  "anio": 2025,
+  "km": 8100,
+  "precio": 84900000,
+  "tipo": "SUV / Camioneta",
+  "comb": "Híbrido ligero",
+  "trans": "Automática",
+  "url": "https://carro.mercadolibre.com.co/MCO-4650213112-suzuki-fronx-15-glx-aut-hibrida-_JM",
+  "foto": "fotos/hq/MCO-4650213112.jpg",
+  "orden": 20261118
  },
  {
   "id": "MCO-2348906727",
@@ -488,5 +488,33 @@
   "url": "https://carro.mercadolibre.com.co/MCO-4264388000-ford-bronco-sport-20-ecoboost-wildtrak-4x4-_JM",
   "foto": "fotos/hq/MCO-4264388000.jpg",
   "orden": 20260815
+ },
+ {
+  "id": "MCO-2387941173",
+  "marca": "Kia",
+  "modelo": "Sportage 2.0 Desire At 4x4",
+  "anio": 2024,
+  "km": 27000,
+  "precio": 105900000,
+  "tipo": "SUV / Camioneta",
+  "comb": "Gasolina",
+  "trans": "Automática",
+  "url": "https://carro.mercadolibre.com.co/MCO-2387941173-kia-sportage-desire-at-4x4-2024-_JM",
+  "foto": "fotos/hq/MCO-2387941173.jpg",
+  "orden": 20261121
+ },
+ {
+  "id": "MCO-4663401794",
+  "marca": "Mazda",
+  "modelo": "Cx-5 2.5 Grand Touring At",
+  "anio": 2020,
+  "km": 71000,
+  "precio": 104900000,
+  "tipo": "SUV / Camioneta",
+  "comb": "Gasolina",
+  "trans": "Automática",
+  "url": "https://carro.mercadolibre.com.co/MCO-4663401794-mazda-cx-5-25-grand-touring-at-_JM",
+  "foto": "fotos/hq/MCO-4663401794.jpg",
+  "orden": 20261121
  }
 ]
