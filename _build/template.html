@@ -116,7 +116,7 @@ section,#inicio{scroll-margin-top:68px}
 .linkbtn{background:none;border:0;color:var(--accent);cursor:pointer;padding:0;font-size:14px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
-.card .ph{aspect-ratio:4/3;background:var(--surface-2);position:relative}
+.card .ph{display:block;aspect-ratio:4/3;background:var(--surface-2);position:relative}
 .card .ph img{width:100%;height:100%;object-fit:cover}
 .tag{position:absolute;left:10px;top:10px;background:rgba(13,13,13,.85);border:1px solid var(--line);border-radius:999px;font-size:12px;padding:3px 10px}
 .card .bd{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
@@ -494,11 +494,11 @@ function render(){
   $('#clear').hidden=!act;
   $('#grid').innerHTML=r.length?r.slice(0,shown).map(c=>{
     const t=`${c.marca} ${c.modelo} ${c.anio}`;
-    return `<article class="card"><div class="ph"><img src="${esc(c.foto)}" alt="${esc(t)}" loading="lazy">${/H[ií]brido|El[eé]ctrico/.test(c.comb)?`<span class="tag">${esc(c.comb)}</span>`:''}</div>
-    <div class="bd"><h3>${esc(c.marca)} ${esc(c.modelo)}</h3>
+    return `<article class="card"><a class="ph" href="carro/${esc(c.p)}/" aria-label="Ver detalles del ${esc(t)}"><img src="${esc(c.foto)}" alt="${esc(t)}" loading="lazy">${/H[ií]brido|El[eé]ctrico/.test(c.comb)?`<span class="tag">${esc(c.comb)}</span>`:''}</a>
+    <div class="bd"><h3><a href="carro/${esc(c.p)}/" style="text-decoration:none">${esc(c.marca)} ${esc(c.modelo)}</a></h3>
     <div class="specs"><span>${c.anio}</span><span>${Number(c.km).toLocaleString('es-CO')} km</span><span>${esc(c.trans)}</span><span>${esc(c.comb)}</span></div>
     <div class="price">${cop(c.precio)}</div>
-    <div class="act"><a class="btn wa" href="${waLink('Hola OnCars, me interesa el '+t+' que vi en la página web. ¿Podemos agendar para verlo?')}" target="_blank" rel="noopener">Lo quiero ver</a><a class="btn" href="${esc(c.url)}" target="_blank" rel="noopener">Ver detalles</a></div></div></article>`}).join('')
+    <div class="act"><a class="btn wa" href="${waLink('Hola OnCars, me interesa el '+t+' que vi en la página web. ¿Podemos agendar para verlo?')}" target="_blank" rel="noopener">Lo quiero ver</a><a class="btn" href="carro/${esc(c.p)}/">Ver detalles</a></div></div></article>`}).join('')
     :`<div class="empty">No tenemos carros con esos filtros en este momento. Cuéntanos qué buscas por <a href="${waLink('Hola OnCars, estoy buscando un carro y no lo encontré en la página. Busco: ')}" target="_blank" rel="noopener">WhatsApp</a> y te avisamos cuando llegue.</div>`;
   $('#verMas').hidden=r.length<=shown;
 }
