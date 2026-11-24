@@ -62,4 +62,6 @@ open(R+'404.html','w').write('<!DOCTYPE html><html lang="es"><head><meta charset
 urls=[(SITE,'1.0','daily')]+[(SITE+'carro/'+c['p']+'/','0.8','weekly') for c in out]
 open(R+'sitemap.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join(f'<url><loc>{u}</loc><lastmod>{date.today()}</lastmod><changefreq>{f}</changefreq><priority>{p}</priority></url>' for u,p,f in urls)+'</urlset>\n')
 open(R+'robots.txt','w').write(f'User-agent: *\nAllow: /\nSitemap: {SITE}sitemap.xml\n')
+import feed
+print('feed meta:',feed.generar(R,out,det,detalle.slug,detalle.nombre))
 print('ok',len(out))
