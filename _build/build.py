@@ -7,11 +7,12 @@ B=os.path.dirname(os.path.abspath(__file__))+'/'; R=os.path.dirname(B.rstrip('/'
 out=json.load(open(B+'cars.json'))
 for c in out: assert os.path.exists(R+c['foto']),'falta foto '+c['foto']
 upd=sys.argv[1]
-sys.path.insert(0,B); import detalle, shutil
+sys.path.insert(0,B); import detalle, shutil, analitica
+GA=analitica.ga_id(B)
 for c in out: c['p']=detalle.slug(c)
 pub=[{k:v for k,v in c.items() if k!='notas'} for c in out]
 tpl=open(B+'template.html').read()
-t=tpl.replace('/*CARS*/[]',json.dumps(pub,ensure_ascii=False)).replace('/*UPDATED*/',upd)
+t=tpl.replace('/*CARS*/[]',json.dumps(pub,ensure_ascii=False)).replace('/*UPDATED*/',upd).replace('</head>',analitica.snippet(GA)+'</head>',1)
 SITE='https://oncarsco.com/'
 # Entrega: en Medellín se entrega sin costo; a otras ciudades se lleva y el traslado lo paga el comprador (costo variable, no se publica tarifa).
 SHIP={"@type":"OfferShippingDetails","shippingDestination":{"@type":"DefinedRegion","addressCountry":"CO","addressRegion":"ANT"},
@@ -53,6 +54,7 @@ css=tpl.split('<style>',1)[1].split('</style>',1)[0]
 shutil.rmtree(R+'carro',ignore_errors=True)
 for c in out:
     sl,h=detalle.pagina(c,det.get(c['id'],{}),css,out)
+    h=h.replace('</head>',analitica.snippet(GA,{'id':c['id'],'nombre':c['marca']+' '+detalle.nombre(c)+' '+str(c['anio']),'marca':c['marca'],'tipo':c.get('tipo',''),'precio':c['precio']})+'</head>',1)
     os.makedirs(R+'carro/'+sl,exist_ok=True); open(R+'carro/'+sl+'/index.html','w').write(h)
 sin=[c['id'] for c in out if c['id'] not in det]
 if sin: print('sin detalles de la publicación:',' '.join(sin))

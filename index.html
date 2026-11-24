@@ -494,7 +494,7 @@ function render(){
   $('#clear').hidden=!act;
   $('#grid').innerHTML=r.length?r.slice(0,shown).map(c=>{
     const t=`${c.marca} ${c.modelo} ${c.anio}`;
-    return `<article class="card"><a class="ph" href="carro/${esc(c.p)}/" aria-label="Ver detalles del ${esc(t)}"><img src="${esc(c.foto)}" alt="${esc(t)}" loading="lazy">${/H[ií]brido|El[eé]ctrico/.test(c.comb)?`<span class="tag">${esc(c.comb)}</span>`:''}</a>
+    return `<article class="card" data-id="${esc(c.id)}" data-name="${esc(t)}" data-price="${c.precio}"><a class="ph" href="carro/${esc(c.p)}/" aria-label="Ver detalles del ${esc(t)}"><img src="${esc(c.foto)}" alt="${esc(t)}" loading="lazy">${/H[ií]brido|El[eé]ctrico/.test(c.comb)?`<span class="tag">${esc(c.comb)}</span>`:''}</a>
     <div class="bd"><h3><a href="carro/${esc(c.p)}/" style="text-decoration:none">${esc(c.marca)} ${esc(c.modelo)}</a></h3>
     <div class="specs"><span>${c.anio}</span><span>${Number(c.km).toLocaleString('es-CO')} km</span><span>${esc(c.trans)}</span><span>${esc(c.comb)}</span></div>
     <div class="price">${cop(c.precio)}</div>
