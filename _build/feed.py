@@ -1,6 +1,7 @@
 # Feeds de catálogo para Meta (pauta). Se generan en cada build:
 #   feed/meta-vehiculos.csv  -> catálogo tipo "Vehículos" (anuncios de inventario automotriz)
 #   feed/meta-productos.csv  -> catálogo tipo "Comercio electrónico" (alternativa si Vehículos no está disponible)
+# Dirección: OnCars es virtual (no se atiende en la dirección registrada), por eso addr1 = 'Medellín'.
 # Meta los lee por URL programada, así que se mantienen al día con cada sincronización del inventario.
 import csv, os
 SITE = 'https://oncarsco.com/'
@@ -43,7 +44,7 @@ def generar(R, out, det_all, slug, nombre):
              'fuel_type': FUEL.get(c.get('comb'), 'OTHER'),
              'drivetrain': DRIVE.get(det.get('tr'), 'Other'),
              'availability': 'available',
-             'address.city': 'Medellín', 'address.region': 'Antioquia', 'address.country': 'CO',
+             'address.addr1': 'Medellín', 'address.city': 'Medellín', 'address.region': 'Antioquia', 'address.country': 'CO',
              'latitude': '6.2442', 'longitude': '-75.5812'}
         for i, u in enumerate(fotos[:20]):
             r[f'image[{i}].url'] = u
@@ -57,7 +58,7 @@ def generar(R, out, det_all, slug, nombre):
     nimg = max(len([k for k in r if k.startswith('image[')]) for r in veh)
     cols = ['vehicle_id', 'title', 'description', 'url', 'make', 'model', 'year', 'mileage.value', 'mileage.unit',
             'body_style', 'price', 'exterior_color', 'state_of_vehicle', 'condition', 'transmission', 'fuel_type',
-            'drivetrain', 'availability', 'address.city', 'address.region', 'address.country', 'latitude', 'longitude'] \
+            'drivetrain', 'availability', 'address.addr1', 'address.city', 'address.region', 'address.country', 'latitude', 'longitude'] \
         + [f'image[{i}].url' for i in range(nimg)]
     for nom, filas, cs in (('meta-vehiculos.csv', veh, cols), ('meta-productos.csv', prod, list(prod[0]))):
         with open(R + 'feed/' + nom, 'w', newline='', encoding='utf-8') as fh:
