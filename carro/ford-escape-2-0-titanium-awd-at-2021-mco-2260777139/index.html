@@ -249,6 +249,19 @@ body.fs-open{overflow:hidden}
 .mbar{display:none}
 @media (max-width:700px){.mbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:25;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(13,13,13,.96);border-top:1px solid var(--line)}.mbar .btn{width:100%}body{padding-bottom:76px}.waf{display:none}}
 </style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3RBDD2DGX1"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
+gtag('js',new Date());gtag('config','G-3RBDD2DGX1');
+(()=>{const CAR={"id": "MCO-2260777139", "nombre": "Ford Escape 2021", "marca": "Ford", "tipo": "SUV / Camioneta", "precio": 82800000};
+if(CAR.id)gtag('event','view_item',{currency:'COP',value:CAR.precio,items:[{item_id:CAR.id,item_name:CAR.nombre,item_brand:CAR.marca,item_category:CAR.tipo,price:CAR.precio}]});
+const where=a=>a.closest('.mbar')?'barra_movil':a.closest('.waf')?'flotante':a.closest('header')?'encabezado':a.closest('.card,article')?'tarjeta':a.closest('form,.form')?'formulario':CAR.id?'detalle':'otro';
+const info=a=>{const art=a.closest('[data-id]');const id=art?art.dataset.id:CAR.id;const n=art?art.dataset.name:CAR.nombre;const v=art?Number(art.dataset.price):CAR.precio;return id?{car_id:id,car_name:n,value:v,currency:'COP'}:{}};
+document.addEventListener('click',e=>{const a=e.target.closest('a');if(!a)return;const h=a.getAttribute('href')||'';
+if(h.includes('wa.me')){const w=where(a);gtag('event','whatsapp_click',{ubicacion:w,...info(a)});if(a.classList.contains('wasend'))gtag('event','form_submit',{formulario:(a.closest('form')||{}).id||''})}
+else if(h.startsWith('tel:'))gtag('event','call_click',{ubicacion:where(a),...info(a)});
+else if(h.includes('carro/')&&!CAR.id)gtag('event','ver_detalles',info(a));},{capture:true});})();
+</script>
 </head>
 <body>
 <header><div class="wrap nav">
