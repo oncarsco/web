@@ -45,36 +45,6 @@
   "notas": "Soat hasta abril 2026\nSin reclamaciones ni repintados"
  },
  {
-  "id": "MCO-4663401794",
-  "marca": "Mazda",
-  "modelo": "Cx-5 2.5 Grand Touring At",
-  "anio": 2020,
-  "km": 73000,
-  "precio": 104900000,
-  "tipo": "SUV / Camioneta",
-  "comb": "Gasolina",
-  "trans": "Automática",
-  "url": "https://carro.mercadolibre.com.co/MCO-4663401794-mazda-cx-5-25-grand-touring-at-_JM",
-  "foto": "fotos/hq/MCO-4663401794.jpg",
-  "orden": 20261121,
-  "notas": "Características del vehículo:\n\nMarca: Mazda \nReferencia: Cx5 \nVersión:  Grand Touring 2.5\nPrecio: $104.900.000\n\n- Modelo: 2020\n- Motor: 2.5\n- Kilometraje: 71.000\n- Transmisión: Automática \n- ⁠Cojinería: Cuero \n- ⁠Tipo de tracción: \n- ⁠Tipo de combustible: Gasolina \n- ⁠Placa: 8 Medellín \n- ⁠SOAT:  Diciembre\n- ⁠Tecno: Diciembre\n- ⁠Sunroof\n- ⁠Vidrios eléctricos\n- ⁠Cámara de reversa\n- ⁠Sensores de parqueo\n- ⁠Regulación volante\n- ⁠Apple Car Play\n- ⁠Retrovisores Eléctricos\n- Repintados: Puerta Maleta\n- ⁠Reclamaciones: Puerta Maleta cambiada \n- Ubicación:  Poblado"
- },
- {
-  "id": "MCO-4264363712",
-  "marca": "Mercedes-Benz",
-  "modelo": "Clase Glb 1.3 Glb 200 Amg",
-  "anio": 2023,
-  "km": 11500,
-  "precio": 169800000,
-  "tipo": "SUV / Camioneta",
-  "comb": "Gasolina",
-  "trans": "Automática",
-  "url": "https://carro.mercadolibre.com.co/MCO-4264363712-mercedes-benz-clase-glb-13-glb-200-amg-_JM",
-  "foto": "fotos/hq/MCO-4264363712.jpg",
-  "orden": 20260615,
-  "notas": "Sin reclamaciones, Soat hasta noviembre 2027"
- },
- {
   "id": "MCO-4423632430",
   "marca": "Mazda",
   "modelo": "Cx-30 2.0 Grand Touring Lx At Hibrido Ligero - Mhev",
@@ -133,6 +103,36 @@
   "foto": "fotos/hq/MCO-2188084311.jpg",
   "orden": 20260914,
   "notas": "Soat junio 2027 y tecno\nRepintados bumper delanetero y nave trasera lado piloto."
+ },
+ {
+  "id": "MCO-4264363712",
+  "marca": "Mercedes-Benz",
+  "modelo": "Clase Glb 1.3 Glb 200 Amg",
+  "anio": 2023,
+  "km": 11500,
+  "precio": 169800000,
+  "tipo": "SUV / Camioneta",
+  "comb": "Gasolina",
+  "trans": "Automática",
+  "url": "https://carro.mercadolibre.com.co/MCO-4264363712-mercedes-benz-clase-glb-13-glb-200-amg-_JM",
+  "foto": "fotos/hq/MCO-4264363712.jpg",
+  "orden": 20260615,
+  "notas": "Sin reclamaciones, Soat hasta noviembre 2027"
+ },
+ {
+  "id": "MCO-4663401794",
+  "marca": "Mazda",
+  "modelo": "Cx-5 2.5 Grand Touring At",
+  "anio": 2020,
+  "km": 73000,
+  "precio": 104900000,
+  "tipo": "SUV / Camioneta",
+  "comb": "Gasolina",
+  "trans": "Automática",
+  "url": "https://carro.mercadolibre.com.co/MCO-4663401794-mazda-cx-5-25-grand-touring-at-_JM",
+  "foto": "fotos/hq/MCO-4663401794.jpg",
+  "orden": 20261121,
+  "notas": "Características del vehículo:\n\nMarca: Mazda \nReferencia: Cx5 \nVersión:  Grand Touring 2.5\nPrecio: $104.900.000\n\n- Modelo: 2020\n- Motor: 2.5\n- Kilometraje: 71.000\n- Transmisión: Automática \n- ⁠Cojinería: Cuero \n- ⁠Tipo de tracción: \n- ⁠Tipo de combustible: Gasolina \n- ⁠Placa: 8 Medellín \n- ⁠SOAT:  Diciembre\n- ⁠Tecno: Diciembre\n- ⁠Sunroof\n- ⁠Vidrios eléctricos\n- ⁠Cámara de reversa\n- ⁠Sensores de parqueo\n- ⁠Regulación volante\n- ⁠Apple Car Play\n- ⁠Retrovisores Eléctricos\n- Repintados: Puerta Maleta\n- ⁠Reclamaciones: Puerta Maleta cambiada \n- Ubicación:  Poblado"
  },
  {
   "id": "MCO-4475056666",
@@ -255,21 +255,6 @@
   "notas": "soat agosto 2027 \nsin repintados ni reclamaciones"
  },
  {
-  "id": "MCO-2386141961",
-  "marca": "Toyota",
-  "modelo": "Corolla 1.8 Se-g",
-  "anio": 2023,
-  "km": 27500,
-  "precio": 104900000,
-  "tipo": "Automóvil",
-  "comb": "Híbrido",
-  "trans": "Automática",
-  "url": "https://carro.mercadolibre.com.co/MCO-2386141961-toyota-corolla-18-se-g-_JM",
-  "foto": "fotos/hq/MCO-2386141961.jpg",
-  "orden": 20261119,
-  "notas": "*Características del vehículo:*\n\n\nMarca:toyota\nReferencia: Corolla\nVersión:  SEG\nPrecio: 104.900 mill\n\n- Modelo:  2023\n- Motor: 1.800\n- Kilometraje: 27.516\n- Transmisión: automatica\n- ⁠Cojinería:  cuero\n- ⁠Tipo de tracción:\n- ⁠Tipo de combustible: hibrido\n- ⁠Placa: 2\n- ⁠SOAT:  julio 2027\n- ⁠Sunroof: si\n- ⁠Vidrios eléctricos: si\n- ⁠Cámara de reversa: si\n- ⁠Sensores de parqueo:si\n- ⁠Regulación volante:  si\n- ⁠Apple Car Play: si\n- ⁠Retrovisores Eléctricos: si\n- Repintados:no tiene rayones\n- ⁠Reclamaciones: no\n- Ubicación: poblado"
- },
- {
   "id": "MCO-4471199896",
   "marca": "Chevrolet",
   "modelo": "Equinox 1.5 Premier",
@@ -285,34 +270,19 @@
   "notas": "Soat abril 2027 sin repontados"
  },
  {
-  "id": "MCO-4650213112",
-  "marca": "Suzuki",
-  "modelo": "Fronx 1.5 Glx Aut Hibrida",
-  "anio": 2025,
-  "km": 8100,
-  "precio": 84900000,
-  "tipo": "SUV / Camioneta",
-  "comb": "Híbrido ligero",
-  "trans": "Automática",
-  "url": "https://carro.mercadolibre.com.co/MCO-4650213112-suzuki-fronx-15-glx-aut-hibrida-_JM",
-  "foto": "fotos/hq/MCO-4650213112.jpg",
-  "orden": 20261118,
-  "notas": ""
- },
- {
-  "id": "MCO-2348906727",
+  "id": "MCO-2386141961",
   "marca": "Toyota",
-  "modelo": "Yaris 1.5 Xs Cvt",
-  "anio": 2024,
-  "km": 19000,
-  "precio": 76800000,
+  "modelo": "Corolla 1.8 Se-g",
+  "anio": 2023,
+  "km": 27500,
+  "precio": 104900000,
   "tipo": "Automóvil",
-  "comb": "Gasolina",
+  "comb": "Híbrido",
   "trans": "Automática",
-  "url": "https://carro.mercadolibre.com.co/MCO-2348906727-toyota-yaris-15-xs-cvt-_JM",
-  "foto": "fotos/hq/MCO-2348906727.jpg",
-  "orden": 20261105,
-  "notas": "Sin repintados ni reclamaciones\nsoat mayo 2027"
+  "url": "https://carro.mercadolibre.com.co/MCO-2386141961-toyota-corolla-18-se-g-_JM",
+  "foto": "fotos/hq/MCO-2386141961.jpg",
+  "orden": 20261119,
+  "notas": "*Características del vehículo:*\n\n\nMarca:toyota\nReferencia: Corolla\nVersión:  SEG\nPrecio: 104.900 mill\n\n- Modelo:  2023\n- Motor: 1.800\n- Kilometraje: 27.516\n- Transmisión: automatica\n- ⁠Cojinería:  cuero\n- ⁠Tipo de tracción:\n- ⁠Tipo de combustible: hibrido\n- ⁠Placa: 2\n- ⁠SOAT:  julio 2027\n- ⁠Sunroof: si\n- ⁠Vidrios eléctricos: si\n- ⁠Cámara de reversa: si\n- ⁠Sensores de parqueo:si\n- ⁠Regulación volante:  si\n- ⁠Apple Car Play: si\n- ⁠Retrovisores Eléctricos: si\n- Repintados:no tiene rayones\n- ⁠Reclamaciones: no\n- Ubicación: poblado"
  },
  {
   "id": "MCO-4264388600",
@@ -405,19 +375,19 @@
   "notas": "Soat Julio 2027"
  },
  {
-  "id": "MCO-2166820165",
-  "marca": "Mazda",
-  "modelo": "Cx-30 2.5 Grand Touring Lx Carbon Edition Awd At",
+  "id": "MCO-4650213112",
+  "marca": "Suzuki",
+  "modelo": "Fronx 1.5 Glx Aut Hibrida",
   "anio": 2025,
-  "km": 19000,
-  "precio": 121800000,
+  "km": 8100,
+  "precio": 84900000,
   "tipo": "SUV / Camioneta",
-  "comb": "Gasolina",
+  "comb": "Híbrido ligero",
   "trans": "Automática",
-  "url": "https://carro.mercadolibre.com.co/MCO-2166820165-mazda-cx-30-25-grand-touring-lx-carbon-edition-awd-at-_JM",
-  "foto": "fotos/hq/MCO-2166820165.jpg",
-  "orden": 20260914,
-  "notas": "Soat Febrero 2027, sin reclamaciones ni repintados."
+  "url": "https://carro.mercadolibre.com.co/MCO-4650213112-suzuki-fronx-15-glx-aut-hibrida-_JM",
+  "foto": "fotos/hq/MCO-4650213112.jpg",
+  "orden": 20261118,
+  "notas": ""
  },
  {
   "id": "MCO-4398436158",
@@ -448,6 +418,21 @@
   "foto": "fotos/hq/MCO-2260777139.jpg",
   "orden": 20261006,
   "notas": "Repintado guardabarros derecho."
+ },
+ {
+  "id": "MCO-2166820165",
+  "marca": "Mazda",
+  "modelo": "Cx-30 2.5 Grand Touring Lx Carbon Edition Awd At",
+  "anio": 2025,
+  "km": 19000,
+  "precio": 121800000,
+  "tipo": "SUV / Camioneta",
+  "comb": "Gasolina",
+  "trans": "Automática",
+  "url": "https://carro.mercadolibre.com.co/MCO-2166820165-mazda-cx-30-25-grand-touring-lx-carbon-edition-awd-at-_JM",
+  "foto": "fotos/hq/MCO-2166820165.jpg",
+  "orden": 20260914,
+  "notas": "Soat Febrero 2027, sin reclamaciones ni repintados."
  },
  {
   "id": "MCO-4461677442",
