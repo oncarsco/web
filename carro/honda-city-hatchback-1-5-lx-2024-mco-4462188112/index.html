@@ -262,6 +262,17 @@ if(h.includes('wa.me')){const w=where(a);gtag('event','whatsapp_click',{ubicacio
 else if(h.startsWith('tel:'))gtag('event','call_click',{ubicacion:where(a),...info(a)});
 else if(h.includes('carro/')&&!CAR.id)gtag('event','ver_detalles',info(a));},{capture:true});})();
 </script>
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','1527511037883855');fbq('track','PageView');
+(()=>{const CAR={"id": "MCO-4462188112", "nombre": "Honda City Hatchback 2024", "marca": "Honda", "tipo": "Automóvil", "precio": 74800000};
+const ci=a=>{const art=a.closest('[data-id]');const id=art?art.dataset.id:CAR.id;const v=art?Number(art.dataset.price):CAR.precio;return id?{content_ids:[id],content_type:'vehicle',value:v,currency:'COP'}:{}};
+if(CAR.id)fbq('track','ViewContent',{content_ids:[CAR.id],content_type:'vehicle',content_name:CAR.nombre,value:CAR.precio,currency:'COP'});
+document.addEventListener('click',e=>{const a=e.target.closest('a');if(!a)return;const h=a.getAttribute('href')||'';
+if(h.includes('wa.me')){if(a.classList.contains('wasend'))fbq('track','Lead',ci(a));else fbq('track','Contact',ci(a))}
+else if(h.startsWith('tel:'))fbq('track','Contact',ci(a));},{capture:true});})();
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1527511037883855&ev=PageView&noscript=1"/></noscript>
 </head>
 <body>
 <header><div class="wrap nav">
