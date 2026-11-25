@@ -34,6 +34,6 @@ document.getElementById('ok').onclick=()=>wa(keep?'mantiene':'acepta',base);
 const inp=document.getElementById('p'),btn=document.getElementById('send'),err=document.getElementById('e');
 function val(){let n=+inp.value.replace(/[^0-9]/g,'');if(n&&n<10000)n*=1e6;return n}
 inp.oninput=()=>{const n=+inp.value.replace(/[^0-9]/g,'');inp.value=n?'$ '+n.toLocaleString('es-CO'):'';const v=val();
-  const bad=!v||v<5e6||v>3e9;btn.disabled=bad;err.textContent=v&&bad?'Revisa el valor':(v&&v<1e8&&n<10000?'Se enviará como '+fmt(v):'')};
+  const bad=!v||v<5e6||v>3e9;btn.disabled=bad;err.style.color=bad?'#A33':'#595959';err.textContent=!v?'':bad?'Revisa el valor':'Vas a proponer '+fmt(v)};
 btn.onclick=()=>{const v=val();if(v)wa('propone',v)};
 </script></body></html>
