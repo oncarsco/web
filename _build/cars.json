@@ -210,21 +210,6 @@
   "notas": "Soat y tecno - enero 2027\nsin reclamaciones ni repiontados"
  },
  {
-  "id": "MCO-2352205895",
-  "marca": "Mercedes-Benz",
-  "modelo": "Clase Glc 2.0 4matic",
-  "anio": 2020,
-  "km": 20000,
-  "precio": 135000000,
-  "tipo": "SUV / Camioneta",
-  "comb": "Gasolina",
-  "trans": "Automática",
-  "url": "https://carro.mercadolibre.com.co/MCO-2352205895-mercedes-benz-clase-glc-20-4matic-_JM",
-  "foto": "fotos/hq/MCO-2352205895.jpg",
-  "orden": 20261107,
-  "notas": "soat Febrero 2027\nTecno abril 2027"
- },
- {
   "id": "MCO-2352200141",
   "marca": "BMW",
   "modelo": "Ix1 Ix1 Xdrive30 Edición M",
@@ -260,7 +245,7 @@
   "modelo": "Equinox 1.5 Premier",
   "anio": 2020,
   "km": 51000,
-  "precio": 82000000,
+  "precio": 79900000,
   "tipo": "SUV / Camioneta",
   "comb": "Gasolina",
   "trans": "Automática",
@@ -285,6 +270,21 @@
   "notas": "*Características del vehículo:*\n\n\nMarca:toyota\nReferencia: Corolla\nVersión:  SEG\nPrecio: 104.900 mill\n\n- Modelo:  2023\n- Motor: 1.800\n- Kilometraje: 27.516\n- Transmisión: automatica\n- ⁠Cojinería:  cuero\n- ⁠Tipo de tracción:\n- ⁠Tipo de combustible: hibrido\n- ⁠Placa: 2\n- ⁠SOAT:  julio 2027\n- ⁠Sunroof: si\n- ⁠Vidrios eléctricos: si\n- ⁠Cámara de reversa: si\n- ⁠Sensores de parqueo:si\n- ⁠Regulación volante:  si\n- ⁠Apple Car Play: si\n- ⁠Retrovisores Eléctricos: si\n- Repintados:no tiene rayones\n- ⁠Reclamaciones: no\n- Ubicación: poblado"
  },
  {
+  "id": "MCO-2352205895",
+  "marca": "Mercedes-Benz",
+  "modelo": "Clase Glc 2.0 4matic",
+  "anio": 2020,
+  "km": 20000,
+  "precio": 135000000,
+  "tipo": "SUV / Camioneta",
+  "comb": "Gasolina",
+  "trans": "Automática",
+  "url": "https://carro.mercadolibre.com.co/MCO-2352205895-mercedes-benz-clase-glc-20-4matic-_JM",
+  "foto": "fotos/hq/MCO-2352205895.jpg",
+  "orden": 20261107,
+  "notas": "soat Febrero 2027\nTecno abril 2027"
+ },
+ {
   "id": "MCO-4264388600",
   "marca": "Volkswagen",
   "modelo": "Gol 1.6 Trendline",
@@ -298,21 +298,6 @@
   "foto": "fotos/hq/MCO-4264388600.jpg",
   "orden": 20260815,
   "notas": ""
- },
- {
-  "id": "MCO-2387941173",
-  "marca": "Kia",
-  "modelo": "Sportage 2.0 Desire At 4x4",
-  "anio": 2024,
-  "km": 27000,
-  "precio": 105900000,
-  "tipo": "SUV / Camioneta",
-  "comb": "Gasolina",
-  "trans": "Automática",
-  "url": "https://carro.mercadolibre.com.co/MCO-2387941173-kia-sportage-desire-at-4x4-2024-_JM",
-  "foto": "fotos/hq/MCO-2387941173.jpg",
-  "orden": 20261121,
-  "notas": "Características del vehículo:\n\nMarca: Kia\nReferencia: Sportage \nVersión:  Desire 2.0 4x4\nPrecio: $105.900.000\n\n- Modelo:  2024\n- Motor: 2.000\n- Kilometraje: 27.000\n- Transmisión: Automática \n- ⁠Cojinería: Tela\n- ⁠Tipo de tracción: 4x4\n- ⁠Tipo de combustible: Gasolina\n- ⁠Placa: 9 Envigado\n- ⁠SOAT:  Marzo 2027\n- ⁠Tecno: N/A\n- ⁠Vidrios eléctricos\n- ⁠Cámara de reversa\n- ⁠Sensores de parqueo\n- ⁠Regulación volante\n- ⁠Apple Car Play\n- ⁠Retrovisores Eléctricos\n- Sin Repintados\n- ⁠Sin Reclamaciones\n- Ubicación: Poblado\nÚnico dueño"
  },
  {
   "id": "MCO-4398397054",
@@ -360,6 +345,21 @@
   "notas": "Soat 21 marzo\n3.0 biturbo."
  },
  {
+  "id": "MCO-2387941173",
+  "marca": "Kia",
+  "modelo": "Sportage 2.0 Desire At 4x4",
+  "anio": 2024,
+  "km": 27000,
+  "precio": 105900000,
+  "tipo": "SUV / Camioneta",
+  "comb": "Gasolina",
+  "trans": "Automática",
+  "url": "https://carro.mercadolibre.com.co/MCO-2387941173-kia-sportage-desire-at-4x4-2024-_JM",
+  "foto": "fotos/hq/MCO-2387941173.jpg",
+  "orden": 20261121,
+  "notas": "Características del vehículo:\n\nMarca: Kia\nReferencia: Sportage \nVersión:  Desire 2.0 4x4\nPrecio: $105.900.000\n\n- Modelo:  2024\n- Motor: 2.000\n- Kilometraje: 27.000\n- Transmisión: Automática \n- ⁠Cojinería: Tela\n- ⁠Tipo de tracción: 4x4\n- ⁠Tipo de combustible: Gasolina\n- ⁠Placa: 9 Envigado\n- ⁠SOAT:  Marzo 2027\n- ⁠Tecno: N/A\n- ⁠Vidrios eléctricos\n- ⁠Cámara de reversa\n- ⁠Sensores de parqueo\n- ⁠Regulación volante\n- ⁠Apple Car Play\n- ⁠Retrovisores Eléctricos\n- Sin Repintados\n- ⁠Sin Reclamaciones\n- Ubicación: Poblado\nÚnico dueño"
+ },
+ {
   "id": "MCO-4501694310",
   "marca": "Toyota",
   "modelo": "Hilux 2.4 Diésel 4x4",
@@ -373,21 +373,6 @@
   "foto": "fotos/hq/MCO-4501694310.jpg",
   "orden": 20261003,
   "notas": "Soat Julio 2027"
- },
- {
-  "id": "MCO-4650213112",
-  "marca": "Suzuki",
-  "modelo": "Fronx 1.5 Glx Aut Hibrida",
-  "anio": 2025,
-  "km": 8100,
-  "precio": 84900000,
-  "tipo": "SUV / Camioneta",
-  "comb": "Híbrido ligero",
-  "trans": "Automática",
-  "url": "https://carro.mercadolibre.com.co/MCO-4650213112-suzuki-fronx-15-glx-aut-hibrida-_JM",
-  "foto": "fotos/hq/MCO-4650213112.jpg",
-  "orden": 20261118,
-  "notas": ""
  },
  {
   "id": "MCO-4398436158",
@@ -405,21 +390,6 @@
   "notas": "Soat hasta noviembre, tecno hasta diciembre\nSe hizo restauración completa de pintura"
  },
  {
-  "id": "MCO-2260777139",
-  "marca": "Ford",
-  "modelo": "Escape 2.0 Titanium Awd At",
-  "anio": 2021,
-  "km": 58000,
-  "precio": 82800000,
-  "tipo": "SUV / Camioneta",
-  "comb": "Gasolina",
-  "trans": "Automática",
-  "url": "https://carro.mercadolibre.com.co/MCO-2260777139-ford-escape-20-titanium-awd-at-_JM",
-  "foto": "fotos/hq/MCO-2260777139.jpg",
-  "orden": 20261006,
-  "notas": "Repintado guardabarros derecho."
- },
- {
   "id": "MCO-2166820165",
   "marca": "Mazda",
   "modelo": "Cx-30 2.5 Grand Touring Lx Carbon Edition Awd At",
@@ -435,6 +405,21 @@
   "notas": "Soat Febrero 2027, sin reclamaciones ni repintados."
  },
  {
+  "id": "MCO-2260777139",
+  "marca": "Ford",
+  "modelo": "Escape 2.0 Titanium Awd At",
+  "anio": 2021,
+  "km": 58000,
+  "precio": 82800000,
+  "tipo": "SUV / Camioneta",
+  "comb": "Gasolina",
+  "trans": "Automática",
+  "url": "https://carro.mercadolibre.com.co/MCO-2260777139-ford-escape-20-titanium-awd-at-_JM",
+  "foto": "fotos/hq/MCO-2260777139.jpg",
+  "orden": 20261006,
+  "notas": "Repintado guardabarros derecho."
+ },
+ {
   "id": "MCO-4461677442",
   "marca": "Renault",
   "modelo": "Stepway 1.6 Dynamique Automática",
@@ -448,6 +433,21 @@
   "foto": "fotos/hq/MCO-4461677442.jpg",
   "orden": 20260919,
   "notas": "Soat febrero 2027\nsin reclamaciones"
+ },
+ {
+  "id": "MCO-4650213112",
+  "marca": "Suzuki",
+  "modelo": "Fronx 1.5 Glx Aut Hibrida",
+  "anio": 2025,
+  "km": 8100,
+  "precio": 84900000,
+  "tipo": "SUV / Camioneta",
+  "comb": "Híbrido ligero",
+  "trans": "Automática",
+  "url": "https://carro.mercadolibre.com.co/MCO-4650213112-suzuki-fronx-15-glx-aut-hibrida-_JM",
+  "foto": "fotos/hq/MCO-4650213112.jpg",
+  "orden": 20261118,
+  "notas": ""
  },
  {
   "id": "MCO-2237458133",
