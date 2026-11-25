@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>OnCars · Tu decisión sobre el precio</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#0D0D0D;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#fff;color:#0D0D0D;border-radius:16px;max-width:440px;width:100%;padding:26px 22px;border-top:6px solid #F5C643}
+.brand{font-weight:800;letter-spacing:3px;font-size:13px;color:#595959}h1{font-size:22px;line-height:1.25;margin:6px 0 4px}
+.ref{color:#595959;font-size:13px;margin-bottom:18px}.box{border:1px solid #D9D9D9;border-radius:12px;padding:16px;margin-top:14px}
+.lbl{font-size:12px;color:#595959;text-transform:uppercase;letter-spacing:.6px}.big{font-size:26px;font-weight:800;margin:2px 0 10px}
+button{width:100%;border:0;border-radius:10px;padding:14px;font-size:16px;font-weight:700;cursor:pointer}
+.b1{background:#0D0D0D;color:#F5C643}.b2{background:#F5C643;color:#0D0D0D}button:disabled{opacity:.45;cursor:default}
+input{width:100%;font-size:22px;font-weight:700;padding:12px;border:2px solid #BFBFBF;border-radius:10px;margin:6px 0 10px}
+input:focus{outline:none;border-color:#0D0D0D}.s{font-size:13px;color:#595959;margin-top:14px}.err{color:#A33;font-size:13px;min-height:18px}
+</style></head><body><main class="card">
+<div class="brand">ONCARS</div><h1 id="t">Tu decisión sobre el precio</h1><div class="ref" id="r"></div>
+<div class="box" id="boxRec" hidden><div class="lbl" id="recLbl">Precio recomendado</div><div class="big" id="rec"></div>
+<button class="b1" id="ok"></button></div>
+<div class="box"><div class="lbl">Proponer otro precio</div>
+<input id="p" inputmode="numeric" autocomplete="off" placeholder="$ 0" aria-label="Precio que propones">
+<div class="err" id="e"></div><button class="b2" id="send" disabled>Enviar propuesta</button></div>
+<p class="s">Al enviar se abre WhatsApp con tu decisión lista para mandarla a OnCars desde tu número. Apenas la recibamos, actualizamos el precio en la web, Mercado Libre y redes.</p>
+</main><script>
+const WA='573166279204',q=new URLSearchParams(location.search);
+const T=(q.get('t')||'').slice(0,80),R=(q.get('r')||'').replace(/[^A-Z0-9-]/gi,'').slice(0,20),REC=+q.get('rec')||0,ACT=+q.get('act')||0;
+const fmt=n=>'$'+Math.round(n).toLocaleString('es-CO');
+if(T)document.getElementById('t').textContent=T;if(R)document.getElementById('r').textContent='Referencia '+R;
+const keep=!REC||(ACT&&REC>=ACT),base=REC||ACT;
+if(base){document.getElementById('boxRec').hidden=false;document.getElementById('recLbl').textContent=keep?'Precio actual':'Precio recomendado por OnCars';
+  document.getElementById('rec').textContent=fmt(base);document.getElementById('ok').textContent=keep?'Mantener '+fmt(base):'Acepto '+fmt(base)}
+function wa(tipo,v){const intro=`Hola, soy el dueño del ${T||'carro'}${R?' (ref. '+R+')':''}.`;
+  const txt=tipo==='acepta'?`${intro} Apruebo publicarlo en ${fmt(v)}, el precio recomendado.`:tipo==='mantiene'?`${intro} Apruebo mantener el precio en ${fmt(v)}.`:`${intro} Propongo publicarlo en ${fmt(v)}.`;
+  location.href='https://wa.me/'+WA+'?text='+encodeURIComponent(txt+`\n\nCódigo OnCars: ${R}|${tipo}|${Math.round(v)}`)}
+document.getElementById('ok').onclick=()=>wa(keep?'mantiene':'acepta',base);
+const inp=document.getElementById('p'),btn=document.getElementById('send'),err=document.getElementById('e');
+function val(){let n=+inp.value.replace(/[^0-9]/g,'');if(n&&n<10000)n*=1e6;return n}
+inp.oninput=()=>{const n=+inp.value.replace(/[^0-9]/g,'');inp.value=n?'$ '+n.toLocaleString('es-CO'):'';const v=val();
+  const bad=!v||v<5e6||v>3e9;btn.disabled=bad;err.textContent=v&&bad?'Revisa el valor':(v&&v<1e8&&n<10000?'Se enviará como '+fmt(v):'')};
+btn.onclick=()=>{const v=val();if(v)wa('propone',v)};
+</script></body></html>

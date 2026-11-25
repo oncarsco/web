@@ -92,13 +92,14 @@ def pagina(X_):
 <tr><td>Recomendación</td><td class=n>{'Mantener' if not prev.get('rec') else mill(prev['rec'])}</td><td class=n>{'Mantener' if keep else mill(r)}</td></tr></table></div></div>"""
     ref = X_['id']
     base = f"Hola, soy el dueño del {titulo} (ref. {ref})."
+    codigo = lambda tipo, v: f"\n\nCódigo OnCars: {ref}|{tipo}|{round(v * 1e6)}"
     if keep:
-        b1 = ('Estoy de acuerdo: mantener ' + mill(p), base + f" Estoy de acuerdo con mantener el precio en {mill(p)}.")
+        b1 = ('Mantener ' + mill(p), base + f" Apruebo mantener el precio en {mill(p)}." + codigo('mantiene', p))
     else:
-        b1 = ('Acepto publicarlo en ' + mill(r), base + f" Acepto publicarlo en {mill(r)}.")
-    b2 = ('Prefiero otro precio', base + " Prefiero publicarlo en $")
-    decide = f"""<div class="sec"><div class="dec"><h2>TU DECISIÓN</h2><p class="why" style="margin:0 0 3mm">Toca una opción y se abre WhatsApp con el mensaje listo para enviarnos desde tu número. Si eliges otro precio, escríbelo al final del mensaje. Apenas lo recibamos, actualizamos el precio en la web, Mercado Libre y redes.</p>
-<div class="btns"><a class="b1" href="{e(walink(b1[1]))}">{e(b1[0])}</a><a class="b2" href="{e(walink(b2[1]))}">{e(b2[0])}</a></div></div></div>"""
+        b1 = ('Acepto ' + mill(r), base + f" Apruebo publicarlo en {mill(r)}, el precio recomendado." + codigo('acepta', r))
+    responder = 'https://oncarsco.com/informes/responder.html?' + urllib.parse.urlencode({'t': titulo, 'r': ref, 'rec': round(r * 1e6) if not keep else 0, 'act': round(p * 1e6)})
+    decide = f"""<div class="sec"><div class="dec"><h2>TU DECISIÓN</h2><p class="why" style="margin:0 0 3mm">Si estás de acuerdo, toca el primer botón. Si prefieres otro precio, toca "Proponer otro precio": se abre una página donde escribes el valor y le das "Enviar propuesta". En los dos casos se abre WhatsApp con tu decisión lista para enviarnos desde tu número, y actualizamos el precio en la web, Mercado Libre y redes.</p>
+<div class="btns"><a class="b1" href="{e(walink(b1[1]))}">{e(b1[0])}</a><a class="b2" href="{e(responder)}">Proponer otro precio</a></div></div></div>"""
     if ac:
         pos_txt = (f"A este precio tu carro queda por encima del rango competitivo ({mill(lo)} – {mill(hi)}). Lo publicamos así porque es tu decisión; en la próxima revisión te mostramos cómo está respondiendo el mercado." if pa > hi + 0.05
                    else f"A este precio tu carro queda dentro del rango competitivo del mercado ({mill(lo)} – {mill(hi)})." if pa >= lo
@@ -109,9 +110,9 @@ def pagina(X_):
                 ('Precio acordado', mill(pa)), ('Fecha de la decisión', flarga(ac['fecha'][:10])), ('Canal', 'WhatsApp, desde tu número registrado con OnCars'),
                 ('Próxima revisión del mercado', 'En dos semanas, con una actualización de este informe')]
         tr = ''.join(f"<tr><td>{e(a)}</td><td class=n>{e(b)}</td></tr>" for a, b in rows)
-        cambiar = base + " Quiero cambiar el precio a $"
+        cambiar = 'https://oncarsco.com/informes/responder.html?' + urllib.parse.urlencode({'t': titulo, 'r': ref, 'rec': 0, 'act': round(pa * 1e6)})
         decide = f"""<div class="sec"><div class="dec"><h2>REGISTRO DE TU DECISIÓN</h2><table>{tr}</table>
-<p class="why" style="margin:3mm 0">{e(pos_txt)}</p><div class="btns"><a class="b2" href="{e(walink(cambiar))}">Quiero cambiar el precio</a></div></div></div>"""
+<p class="why" style="margin:3mm 0">{e(pos_txt)}</p><div class="btns"><a class="b2" href="{e(cambiar)}">Quiero cambiar el precio</a></div></div></div>"""
     sig = 'Algunos buscan simplemente un carro, pero otros, buscan tomar decisiones inteligentes. Si ese es tu caso, hablemos.'
     return f"""<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><style>{FONTS}
 @page{{size:A4;margin:0}}*{{box-sizing:border-box}}body{{margin:0;font:10.5pt/1.45 Bric,sans-serif;color:#0D0D0D;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
