@@ -68,7 +68,15 @@ def pagina(X_):
     cambio = ''
     if upd and prev:
         pr = prev.get('rec') or prev.get('precio')
-        cambio = f"""<div class="sec"><div class="chg"><h2>QUÉ CAMBIÓ DESDE EL INFORME DEL {flarga(prev['fecha']).upper()}</h2><table><tr><th></th><th class=n>Antes</th><th class=n>Hoy</th></tr>
+        dc = X_.get('decision') or {}
+        dtxt = ''
+        if dc.get('tipo') in ('acepta', 'propone') and dc.get('precio'):
+            dtxt = (f"El {flarga(dc['fecha'][:10])} nos pediste publicarlo en {mill(dc['precio']/1e6)}"
+                    + (f" (el recomendado era {mill(dc['recomendado']/1e6)})" if dc.get('tipo') == 'propone' and dc.get('recomendado') else '') + '.')
+        elif dc.get('tipo') == 'mantiene':
+            dtxt = f"El {flarga(dc['fecha'][:10])} decidiste mantener el precio en {mill(dc['precio']/1e6)}."
+        dhtml = f'<p class="why" style="margin:0 0 2.5mm">{e(dtxt)} Esto es lo que ha pasado en el mercado desde entonces:</p>' if dtxt else ''
+        cambio = f"""<div class="sec"><div class="chg"><h2>QUÉ CAMBIÓ DESDE EL INFORME DEL {flarga(prev['fecha']).upper()}</h2>{dhtml}<table><tr><th></th><th class=n>Antes</th><th class=n>Hoy</th></tr>
 <tr><td>Precio publicado</td><td class=n>{mill(prev['precio'])}</td><td class=n>{mill(p)}</td></tr>
 <tr><td>Rango competitivo del mercado</td><td class=n>{mill(prev['a25'])} – {mill(prev['a75'])}</td><td class=n>{mill(lo)} – {mill(hi)}</td></tr>
 <tr><td>Carros comparables publicados</td><td class=n>{prev.get('n','—')}</td><td class=n>{m['n']}</td></tr>

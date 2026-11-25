@@ -12,6 +12,9 @@ if sys.argv[1] == 'importar':
     for doc in json.load(open(sys.argv[2])):
         s = (doc.get('data') or doc).get('semilla')
         if not s: continue
+        decs = [d for d in ((doc.get('data') or doc).get('decisiones') or []) if d.get('estado') != 'anulada']
+        if decs:  # la última decisión del dueño sale en la próxima actualización del informe
+            d = decs[-1]; s = {**s, 'decision': {k: d.get(k) for k in ('tipo', 'precio', 'recomendado', 'fecha', 'estado')}}
         json.dump({'id': doc['id'], **s}, open(D + doc['id'] + '.json', 'w'), ensure_ascii=False, indent=1); n += 1
     print('importados', n)
 else:
