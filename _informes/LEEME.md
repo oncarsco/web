@@ -12,3 +12,6 @@ clave del PDF) viven en OnCars OS, colección `informes`, campo `semilla`, y los
 - Carpeta de datos: variable `INF_DATOS` (por defecto `_informes/datos/`, ignorada por git). Nunca subir datos ni indice.json.
 - El PDF trae dos botones que abren WhatsApp hacia OnCars con la respuesta del dueño (acepta el precio o propone otro).
   El equipo la registra en OnCars OS, que muestra los precios pendientes de actualizar en Mercado Libre.
+- `corregir.py`: cuando el dueño decide el precio, prepara la versión corregida del mismo informe (mismo análisis,
+  con el precio acordado y el registro de la decisión). Luego se genera con `generar.py`. Ninguna versión se borra:
+  OnCars OS guarda la lista en `informes/<id>.versiones`.

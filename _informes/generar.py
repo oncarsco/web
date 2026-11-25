@@ -3,6 +3,8 @@ import sys as _s
 B = os.path.dirname(os.path.abspath(__file__)) + '/'; R = os.path.dirname(B.rstrip('/')) + '/'
 _s.path.insert(0, B); _s.path.insert(0, R + '_build')
 from nuevos import N, SRC
+from actualizar import nota as _nota
+import datetime as _dt
 import detalle as _det
 A = R + '_ig/assets/'
 D = os.environ.get('INF_DATOS', B + 'datos/').rstrip('/') + '/'  # datos privados fuera del repositorio
@@ -37,16 +39,19 @@ def pagina(X_):
     keep = rec is None or rec >= p
     r = p if keep else rec
     lo, hi = m['a25'], m['a75']
-    pts = [p, r, lo, hi] + [x[1] for x in nv[:2]]
+    ac = X_.get('acuerdo')  # versión corregida: el dueño ya decidió el precio
+    pa = ac['precio'] / 1e6 if ac else p
+    if ac: nota = _nota(cars[X_['id']], pa, m, (r if (not keep and pa > r + 0.05) else None), nuevos)
+    pts = [p, r, lo, hi, pa] + [x[1] for x in nv[:2]]
     smin, smax = min(pts) * 0.96, max(pts) * 1.03
     X = lambda v: (v - smin) / (smax - smin) * 100
     # barra de rango
     marks = f"""<div class="band" style="left:{X(lo):.1f}%;width:{X(hi)-X(lo):.1f}%"></div>
-<div class="mk cur" style="left:{X(p):.1f}%"><span>Precio actual<br><b>{mill(p)}</b></span></div>"""
-    if not keep:
+<div class="mk cur" style="left:{X(pa):.1f}%"><span>{'Precio acordado' if ac else 'Precio actual'}<br><b>{mill(pa)}</b></span></div>"""
+    if not keep and not (ac and abs(r - pa) < 0.05):
         marks += f'<div class="mk rec" style="left:{X(r):.1f}%"><span>Recomendado<br><b>{mill(r)}</b></span></div>'
     nmin = nv[0]
-    xn = X(nmin[1]); top_clash = abs(xn - X(p)) < 20
+    xn = X(nmin[1]); top_clash = abs(xn - X(pa)) < 20
     bot_clash = (not keep) and abs(xn - X(r)) < 20
     pos = 'top:-8.2mm' if not top_clash else ('top:8.6mm' if not bot_clash else 'top:16.5mm')
     marks += f'<div class="mk new" style="left:{xn:.1f}%"><span style="{pos}">Nuevo desde<br><b>{mill(nmin[1])}</b></span></div>'
@@ -59,6 +64,10 @@ def pagina(X_):
         dif = p - r
         verdict = f"""<div class="verdict"><div class="lbl">Precio recomendado de publicación</div><div class="big">{mill(r)}</div>
 <div class="sub">Ajuste de {mill(dif)} ({str(round(dif/p*100,1)).replace('.',',')} %) frente al precio actual de {mill(p)}.</div></div>"""
+    if ac:
+        dec_txt = {'acepta': 'Es el precio que te recomendamos y lo confirmaste', 'propone': 'Lo elegiste tú', 'mantiene': 'Decidiste mantener el precio'}[ac['tipo']]
+        verdict = f"""<div class="verdict"><div class="lbl">Precio acordado contigo</div><div class="big">{mill(pa)}</div>
+<div class="sub">{dec_txt} el {flarga(ac['fecha'][:10])} por WhatsApp.{'' if keep or abs(r - pa) < 0.05 else ' Recomendado por OnCars: ' + mill(r) + '.'}</div></div>"""
     t = dias
     tiempo = (f"{t} días" if t >= 2 else "menos de 2 días")
     titulo = c['marca'] + ' ' + _det.nombre(c) + ' ' + str(c['anio'])
@@ -90,6 +99,19 @@ def pagina(X_):
     b2 = ('Prefiero otro precio', base + " Prefiero publicarlo en $")
     decide = f"""<div class="sec"><div class="dec"><h2>TU DECISIÓN</h2><p class="why" style="margin:0 0 3mm">Toca una opción y se abre WhatsApp con el mensaje listo para enviarnos desde tu número. Si eliges otro precio, escríbelo al final del mensaje. Apenas lo recibamos, actualizamos el precio en la web, Mercado Libre y redes.</p>
 <div class="btns"><a class="b1" href="{e(walink(b1[1]))}">{e(b1[0])}</a><a class="b2" href="{e(walink(b2[1]))}">{e(b2[0])}</a></div></div></div>"""
+    if ac:
+        pos_txt = (f"A este precio tu carro queda por encima del rango competitivo ({mill(lo)} – {mill(hi)}). Lo publicamos así porque es tu decisión; en la próxima revisión te mostramos cómo está respondiendo el mercado." if pa > hi + 0.05
+                   else f"A este precio tu carro queda dentro del rango competitivo del mercado ({mill(lo)} – {mill(hi)})." if pa >= lo
+                   else "A este precio tu carro queda por debajo de la mayoría de carros comparables, lo que suele acelerar la venta.")
+        rows = [('Informe original', flarga(X_['fecha'])), ('Precio publicado en ese momento', mill(p)),
+                ('Recomendación de OnCars', 'Mantener ' + mill(p) if keep else mill(r)),
+                ('Tu decisión', {'acepta': 'Aceptaste el precio recomendado', 'propone': 'Propusiste otro precio', 'mantiene': 'Decidiste mantener el precio'}[ac['tipo']]),
+                ('Precio acordado', mill(pa)), ('Fecha de la decisión', flarga(ac['fecha'][:10])), ('Canal', 'WhatsApp, desde tu número registrado con OnCars'),
+                ('Próxima revisión del mercado', 'En dos semanas, con una actualización de este informe')]
+        tr = ''.join(f"<tr><td>{e(a)}</td><td class=n>{e(b)}</td></tr>" for a, b in rows)
+        cambiar = base + " Quiero cambiar el precio a $"
+        decide = f"""<div class="sec"><div class="dec"><h2>REGISTRO DE TU DECISIÓN</h2><table>{tr}</table>
+<p class="why" style="margin:3mm 0">{e(pos_txt)}</p><div class="btns"><a class="b2" href="{e(walink(cambiar))}">Quiero cambiar el precio</a></div></div></div>"""
     sig = 'Algunos buscan simplemente un carro, pero otros, buscan tomar decisiones inteligentes. Si ese es tu caso, hablemos.'
     return f"""<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><style>{FONTS}
 @page{{size:A4;margin:0}}*{{box-sizing:border-box}}body{{margin:0;font:10.5pt/1.45 Bric,sans-serif;color:#0D0D0D;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
@@ -122,10 +144,10 @@ footer.mini{{padding:3mm 14mm;font-size:7.5pt}}header.sm{{padding:7mm 14mm 6mm}}
 .dec{{border:.4mm solid #F5C643;border-radius:3mm;padding:4mm 5mm;background:#FFFBEA}}.btns{{display:flex;gap:4mm}}.btns a{{flex:1;display:block;text-align:center;text-decoration:none;border-radius:2mm;padding:3mm 2mm;font:8.5pt Mich;letter-spacing:.3px}}.b1{{background:#0D0D0D;color:#F5C643}}.b2{{background:#fff;color:#0D0D0D;border:.4mm solid #0D0D0D}}
 .chg{{border:.3mm solid #D9D9D9;border-radius:3mm;padding:4mm 5mm}}.method{{position:absolute;bottom:22mm;left:14mm;right:14mm;font-size:7.2pt;color:#7A7A7A;line-height:1.35}}
 </style></head><body><div class="pg">
-<header><img src="data:image/png;base64,{LOGO}"><div class="r"><b>{'ACTUALIZACIÓN DEL INFORME DE PRECIO' if upd else 'INFORME DE PRECIO DE MERCADO'}</b>Medellín, {flarga(X_['fecha'])}</div></header>
+<header><img src="data:image/png;base64,{LOGO}"><div class="r"><b>{('VERSIÓN CORREGIDA · ' if ac else '') + ('ACTUALIZACIÓN DEL INFORME DE PRECIO' if upd else ('INFORME DE PRECIO' if ac else 'INFORME DE PRECIO DE MERCADO'))}</b>Medellín, {flarga(ac['fecha'][:10] if ac else X_['fecha'])}</div></header>
 <div class="car"><h1>{e(titulo)}</h1><div class="meta">{e(info)}</div></div>
 <div class="row">{verdict}
-<div class="facts"><div><span>Precio publicado hoy</span><b>{mill(p)}</b></div>
+<div class="facts"><div><span>{'Precio antes del acuerdo' if ac else 'Precio publicado hoy'}</span><b>{mill(p)}</b></div>
 <div><span>Tiempo en vitrina</span><b>{e(tiempo)}</b></div>
 <div><span>Carros comparables analizados</span><b>{m['n']}</b></div>
 <div><span>Rango competitivo</span><b style='white-space:nowrap'>{mill(lo)} – {mill(hi)}</b></div></div></div>
@@ -146,7 +168,7 @@ footer.mini{{padding:3mm 14mm;font-size:7.5pt}}header.sm{{padding:7mm 14mm 6mm}}
 <li>Los carros publicados dentro del rango competitivo reciben más contactos y se venden en menos tiempo; los que están arriba del rango acumulan días y terminan negociándose más abajo.</li></ul></div>
 {decide}<div class="sec"><h2>LO QUE SIGUE</h2><ul class="why">
 <li>{('Mientras tanto reforzamos la exposición: pauta con el catálogo de Meta, contenido en redes y seguimiento a cada persona que pregunte.' if keep else 'Mientras tanto seguimos impulsando la publicación en todos nuestros canales.')}</li>
-<li>En dos semanas volvemos a revisar el mercado y te enviamos una actualización de este informe.</li>
+{'' if ac else '<li>En dos semanas volvemos a revisar el mercado y te enviamos una actualización de este informe.</li>'}
 <li>Cualquier duda sobre este informe la resolvemos contigo por WhatsApp o llamada.</li></ul></div>
 <div class="method">Metodología: publicaciones activas en Mercado Libre Colombia consultadas el {flarga(X_['fecha'])}, del mismo modelo y versión, con un año de diferencia como máximo. Cada precio se ajustó al año y kilometraje de tu carro para poder compararlos. Son precios de publicación, no de cierre: en la negociación suelen bajar. Los precios de carros nuevos son precios de lista publicados por las marcas o por concesionarios y pueden variar por versión, promociones y fecha.</div>
 <footer><div class="sig">{sig}</div><div class="ct">OnCars · Concesionario virtual<br><b>316 627 9204</b> · oncarsco.com</div></footer>
@@ -159,6 +181,7 @@ def slug(s):
 def archivo(X_):
     c = cars[X_['id']]; k = X_['km']
     pre = 'Actualizacion informe de precio' if X_.get('tipo') == 'actualizacion' else 'Informe de precio'
+    if X_.get('acuerdo'): pre += ' corregido'
     return f"{pre} - {slug(c['marca']+' '+_det.nombre(c))} {c['anio']} - {k//1000 if k>=1000 else k}{' mil' if k>=1000 else ''} km.pdf"
 
 def generar(path):
@@ -177,7 +200,7 @@ def generar(path):
     m = X_['mercado']
     return {'carId': X_['id'], 'url': 'https://oncarsco.com/informes/' + X_['token'] + '/' + name.replace(' ', '%20'), 'archivo': name,
             'fecha': X_['fecha'], 'tipo': X_.get('tipo', 'inicial'), 'precio': round(X_['precio'] * 1e6), 'rec': round(X_['rec'] * 1e6) if X_['rec'] else None,
-            'a25': round(m['a25'] * 1e6), 'a75': round(m['a75'] * 1e6), 'n': m['n'], 'clave': X_['clave'], 'ok': ok}
+            'a25': round(m['a25'] * 1e6), 'a75': round(m['a75'] * 1e6), 'n': m['n'], 'clave': X_['clave'], 'corregido': (X_.get('acuerdo') or {}).get('fecha'), 'ok': ok}
 
 if __name__ == '__main__':
     # Uso: python3 _informes/generar.py [MCO-xxx ...]   (sin argumentos: todos los de _informes/datos)

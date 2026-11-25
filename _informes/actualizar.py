@@ -59,5 +59,6 @@ if __name__ == '__main__':
                      previo={'fecha': old['fecha'], 'precio': old['precio'], 'rec': old.get('rec'), 'a25': old['mercado']['a25'], 'a75': old['mercado']['a75'], 'n': old['mercado']['n']})
         else:  # carro nuevo: primer informe (el archivo semilla solo trae id, busqueda y nuevos)
             d.update(tipo='inicial', previo=None)
+        for k in ('acuerdo', 'tokenOriginal', 'decision'): d.pop(k, None)  # el acuerdo pertenece al informe anterior
         json.dump(d, open(fp, 'w'), ensure_ascii=False, indent=1)
         print(i, 'rec', rec, 'dias', dias)
