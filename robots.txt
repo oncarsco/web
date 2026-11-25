@@ -1,3 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /informes/
+Disallow: /_informes/
 Sitemap: https://oncarsco.com/sitemap.xml

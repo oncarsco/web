@@ -62,7 +62,7 @@ if sin: print('sin detalles de la publicación:',' '.join(sin))
 open(R+'404.html','w').write('<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Este carro ya no está disponible | OnCars</title><meta name="robots" content="noindex"><meta http-equiv="refresh" content="4;url=/#carros"><style>body{margin:0;background:#0D0D0D;color:#EDEDED;font:17px/1.5 system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;text-align:center;padding:24px}a{color:#0D0D0D;background:#F5C643;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:700;display:inline-block;margin-top:16px}</style></head><body><div><img src="/img/logo.png" alt="OnCars" style="height:44px;margin:0 auto 18px"><h1 style="font-size:22px;margin:0">Este carro ya no está disponible</h1><p style="color:#BFBFBF">Puede que ya se haya vendido. Mira los carros que tenemos hoy.</p><a href="/#carros">Ver carros disponibles</a></div></body></html>')
 urls=[(SITE,'1.0','daily')]+[(SITE+'carro/'+c['p']+'/','0.8','weekly') for c in out]
 open(R+'sitemap.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join(f'<url><loc>{u}</loc><lastmod>{date.today()}</lastmod><changefreq>{f}</changefreq><priority>{p}</priority></url>' for u,p,f in urls)+'</urlset>\n')
-open(R+'robots.txt','w').write(f'User-agent: *\nAllow: /\nSitemap: {SITE}sitemap.xml\n')
+open(R+'robots.txt','w').write(f'User-agent: *\nAllow: /\nDisallow: /informes/\nDisallow: /_informes/\nSitemap: {SITE}sitemap.xml\n')
 import feed
 print('feed meta:',feed.generar(R,out,det,detalle.slug,detalle.nombre))
 print('ok',len(out))
