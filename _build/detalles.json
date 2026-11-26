@@ -298,32 +298,6 @@
 "Aire acondicionado"
 ]
 },
-"MCO-4351300888": {
-"f": [
-"856664-MCO117423971862_102026",
-"816037-MCO115121346466_082026",
-"763930-MCO115121288982_082026",
-"770883-MCO116515871797_082026",
-"647981-MCO116840698533_082026",
-"873517-MCO116515871867_082026",
-"920841-MCO116516525817_082026",
-"673386-MCO116515667847_082026"
-],
-"d": "Mercedes-Benz Clase GLC 2020, usado, 44000 km. Camioneta gris con motor 2.0 de 208 hp, transmisión automática y tracción 4x4. Cuenta con 5 puertas y capacidad para 5 pasajeros. Ideal para ciudad y carretera, con gasolina, ABS, aire acondicionado, GPS, airbags y rines de aleación.",
-"v": "2.0 4matic",
-"co": "Gris",
-"pl": "9",
-"tr": "4x4",
-"pa": "5",
-"hp": "208 hp",
-"eq": [
-"Frenos ABS",
-"Airbag para conductor y pasajero",
-"Llantas de aleación",
-"Aire acondicionado",
-"Computadora de abordo"
-]
-},
 "MCO-2352205895": {
 "f": [
 "845175-MCO119250833142_112026",
@@ -465,31 +439,6 @@
 "eq": [
 "Frenos ABS",
 "Aire acondicionado"
-]
-},
-"MCO-4264388600": {
-"f": [
-"736643-MCO114116392234_082026",
-"884018-MCO114115578694_082026",
-"896628-MCO115442563835_082026",
-"659100-MCO115442651709_082026",
-"917180-MCO115442474769_082026",
-"625187-MCO115442415635_082026",
-"963291-MCO115442651753_082026",
-"999464-MCO115442967009_082026"
-],
-"d": "Volkswagen Gol 2022, usado, 51000 km. Gris, hatchback G7 Trendline 1.6. Tiene motor 1.6 a gasolina, tracción delantera, 5 puertas y capacidad para 5 pasajeros. Uso ideal para ciudad y trayectos diarios.",
-"v": "1.6 Trendline",
-"co": "Gris",
-"pl": "1",
-"tr": "Delantera",
-"pa": "5",
-"hp": "99 hp",
-"eq": [
-"Frenos ABS",
-"Airbag para conductor y pasajero",
-"Aire acondicionado",
-"Computadora de abordo"
 ]
 },
 "MCO-4398397054": {
