@@ -509,23 +509,6 @@
 "co": "Gris",
 "tr": "4x4"
 },
-"MCO-4501694310": {
-"f": [
-"687920-MCO119100513679_102026",
-"894707-MCO117105031748_102026",
-"907526-MCO118685447199_102026",
-"945785-MCO118686296429_102026",
-"950013-MCO118685447241_102026",
-"931562-MCO118686296421_102026",
-"997425-MCO118685742029_102026",
-"649719-MCO118686150003_102026"
-],
-"d": "Toyota Hilux 2027, usado, 6000 km. Pick-up blanca con motor 2.4 diésel, tracción 4x4 y dirección hidráulica. Tiene 5 puertas.\n\nUso ideal para recorridos 4x4 y tareas de trabajo.",
-"v": "2.4 Diésel 4x4",
-"co": "Blanco",
-"pl": "5",
-"tr": "4x4"
-},
 "MCO-2166820165": {
 "f": [
 "768313-MCO116914647717_082026",
@@ -593,37 +576,6 @@
 "eq": [
 "Frenos ABS",
 "Aire acondicionado"
-]
-},
-"MCO-4461677442": {
-"f": [
-"672869-MCO116428365440_092026",
-"987803-MCO116415088758_092026",
-"664870-MCO117915926157_092026",
-"980550-MCO117915838021_092026",
-"728764-MCO117915750899_092026",
-"650754-MCO117915517979_092026",
-"691981-MCO117915518015_092026",
-"994489-MCO117914721743_092026"
-],
-"d": "Renault Stepway 2027, usado, 2500 km, 1.6 Dynamique Automática, gris, hatchback de 5 puertas. Motor 1.6 a gasolina, transmisión automática, tracción delantera y dirección electroasistida. Cuenta con garantía de fábrica y garantía mecánica. Puede ser útil para uso diario y urbano.",
-"v": "1.6 Dynamique Automática",
-"co": "Gris",
-"pl": "5",
-"ud": "Sí",
-"tr": "Delantera",
-"eq": [
-"Con cámara de reversa",
-"Llantas de aleación",
-"Alarma",
-"Frenos ABS",
-"Sensor de parqueo",
-"Airbag para conductor y pasajero",
-"Cierre centralizado de puertas",
-"Con garantía de fábrica",
-"Con garantía mecánica",
-"Aire acondicionado",
-"Vidrios eléctricos"
 ]
 },
 "MCO-2237458133": {
