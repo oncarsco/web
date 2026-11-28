@@ -4,9 +4,14 @@ Este repositorio es público. Por eso aquí solo están las herramientas: los da
 clave del PDF) viven en OnCars OS, colección `informes`, campo `semilla`, y los PDF publicados van cifrados.
 
 - `semilla.py`: trae los datos de OnCars OS a archivos locales (`importar`) y los devuelve (`exportar`).
-- `nuevos.py`: precios de carros nuevos (revisar cada mes).
+- `nuevos.py`: precios de carros nuevos con dos fuentes: precio oficial en la página de cada marca y 0 km más barato en
+  Mercado Libre (revisar cada mes; `FECHA` dice cuándo se revisaron).
 - `scrape.js`: recolecta comparables en Mercado Libre desde el navegador.
-- `actualizar.py`: arma el informe nuevo o la actualización (reglas de recomendación dentro).
+- `actualizar.py`: arma el informe nuevo o la revisión (reglas de recomendación dentro). Guarda `historial` (todos los
+  informes anteriores) y `numero` (1 = primer informe, 2 = segunda revisión…).
+- `gestion.py`: para las revisiones, cuenta lo que hizo OnCars por el carro en el periodo (interesados, seguimiento,
+  citas, canales, republicación) a partir de leads, citas y cars de OnCars OS. Solo conteos, nunca datos de clientes.
+  Las revisiones traen una página extra "seguimiento de tu carro" con esa gestión y la línea de tiempo del precio.
 - `generar.py`: produce el PDF cifrado (AES-256, clave de 6 dígitos por carro, la misma en cada actualización) en
   `informes/<token>/` y escribe `indice.json` en la carpeta de datos.
 - Carpeta de datos: variable `INF_DATOS` (por defecto `_informes/datos/`, ignorada por git). Nunca subir datos ni indice.json.

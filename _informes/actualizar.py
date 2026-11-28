@@ -31,13 +31,27 @@ def nota(car, p, m, rec, nuevos):
     mod = f"{car['marca']} {car['modelo']}".split(' ')[:3]
     c = m['c']; pr = sorted(x[2] for x in c) if c else []
     rango = f"entre {fmt(pr[0])} y {fmt(pr[-1])} millones" if pr else ''
-    nmin = min((N[n][0] for n in nuevos), default=None)
+    nmin = min((N[n][0] for n in nuevos if n in N), default=None)
     s = f"Hoy hay {m['n']} carros comparables publicados; los más parecidos al tuyo están {rango}." if rango else f"Hoy hay {m['n']} carros comparables publicados."
     if rec: s += f" A {fmt(p)} millones el tuyo queda por encima de la mayoría; alrededor de {fmt(rec)} entra en el grupo que más contactos recibe."
     elif p < m['a25']: s += " Tu precio ya está por debajo de la mayoría."
     else: s += " Tu precio está dentro del rango competitivo."
     if nmin and nmin <= p * 1.1: s += f" Con ese presupuesto también se consigue un carro nuevo desde {fmt(nmin)} millones."
     return s
+
+def foto(x):
+    """Resumen de un informe para la línea de tiempo de las siguientes revisiones."""
+    m = x.get('mercado') or {}
+    ac = x.get('acuerdo') or x.get('decision') or {}
+    acordado = ac.get('precio') / 1e6 if ac.get('precio') and ac.get('informe') == x.get('fecha') and ac.get('estado') != 'anulada' else None
+    return {'fecha': x['fecha'], 'precio': x['precio'], 'rec': x.get('rec'), 'a25': m.get('a25', x.get('a25')), 'a50': m.get('a50'),
+            'a75': m.get('a75', x.get('a75')), 'n': m.get('n', x.get('n')), 'acordado': acordado, 'decision': ac.get('tipo') if acordado else None,
+            'decisionFecha': (ac.get('fecha') or '')[:10] if acordado else None}
+
+def historial(old):
+    """Informes anteriores al de `old`. Los informes hechos antes de existir este campo solo traen `previo`."""
+    if old.get('historial') is not None: return list(old['historial'])
+    return [old['previo']] if old.get('previo') else []
 
 def fmt(v): return (f"{v:.1f}".rstrip('0').rstrip('.')).replace('.', ',')
 
@@ -55,10 +69,12 @@ if __name__ == '__main__':
         d = {**old, 'fecha': fecha, 'precio': p, 'km': car['km'], 'anio': car['anio'], 'dias': dias, 'rec': rec, 'mercado': m,
              'nota': nota(car, p, m, rec, old['nuevos']), 'token': secrets.token_hex(8), 'clave': (old or {}).get('clave') or f'{secrets.randbelow(900000)+100000}'}
         if old.get('fecha'):  # ya había informe: esta es una actualización
-            d.update(tipo='actualizacion', tokenAnterior=old.get('token'),
-                     previo={'fecha': old['fecha'], 'precio': old['precio'], 'rec': old.get('rec'), 'a25': old['mercado']['a25'], 'a75': old['mercado']['a75'], 'n': old['mercado']['n']})
+            prev = foto(old)
+            d.update(tipo='actualizacion', tokenAnterior=old.get('token'), previo=prev,
+                     historial=historial(old) + [prev])
         else:  # carro nuevo: primer informe (el archivo semilla solo trae id, busqueda y nuevos)
-            d.update(tipo='inicial', previo=None)
-        for k in ('acuerdo', 'tokenOriginal', 'decision'): d.pop(k, None)  # el acuerdo pertenece al informe anterior
+            d.update(tipo='inicial', previo=None, historial=[])
+        d['numero'] = len(d['historial']) + 1  # 1 = primer informe, 2 = segunda revisión, 3 = tercera…
+        for k in ('acuerdo', 'tokenOriginal', 'decision', 'gestion'): d.pop(k, None)  # pertenecen al informe anterior (gestion la escribe gestion.py)
         json.dump(d, open(fp, 'w'), ensure_ascii=False, indent=1)
         print(i, 'rec', rec, 'dias', dias)

@@ -2,7 +2,7 @@ import json, datetime, os, re, base64, subprocess, html, unicodedata
 import sys as _s
 B = os.path.dirname(os.path.abspath(__file__)) + '/'; R = os.path.dirname(B.rstrip('/')) + '/'
 _s.path.insert(0, B); _s.path.insert(0, R + '_build')
-from nuevos import N, SRC
+from nuevos import N, SRC, FECHA, precio as _pnuevo
 from actualizar import nota as _nota
 import datetime as _dt
 import detalle as _det
@@ -31,11 +31,97 @@ def nombre(c):
     w = [CASE.get(t.lower(), t) for t in c['modelo'].replace('Clase ', '').split()]
     return f"{c['marca']} {' '.join(w)}"
 
+ORD = {2: 'Segunda', 3: 'Tercera', 4: 'Cuarta', 5: 'Quinta', 6: 'Sexta', 7: 'Séptima', 8: 'Octava'}
+def ordinal(n): return ORD.get(n, f'{n}.ª')
+def fcorta(f): y, m, d = map(int, f.split('-')); return f'{d} {MESES[m-1][:3]}'
+
+def linea_tiempo(P):
+    """SVG con el rango competitivo (banda), tu precio (línea) y la recomendación de cada informe."""
+    W, H, L, R, T, Bm = 172, 50, 14, 4, 7, 9  # mm
+    vals = [v for x in P for v in (x['a25'], x['a75'], x['precio'], x.get('rec'), x.get('acordado')) if v]
+    lo, hi = min(vals) * 0.97, max(vals) * 1.03
+    n = len(P)
+    PAD = 12  # deja aire a los lados para las etiquetas de los puntos
+    X = lambda i: L + PAD + (W - L - R - 2 * PAD) * (i / (n - 1) if n > 1 else 0.5)
+    Y = lambda v: T + (H - T - Bm) * (1 - (v - lo) / (hi - lo))
+    band = ' '.join(f'{X(i):.1f},{Y(x["a75"]):.1f}' for i, x in enumerate(P)) + ' ' + ' '.join(f'{X(i):.1f},{Y(x["a25"]):.1f}' for i, x in reversed(list(enumerate(P))))
+    line = ' '.join(f'{X(i):.1f},{Y(x["precio"]):.1f}' for i, x in enumerate(P))
+    g = []
+    for k in range(4):  # guías horizontales
+        v = lo + (hi - lo) * (k + 0.5) / 4
+        g.append(f'<line x1="{L}" x2="{W-R}" y1="{Y(v):.1f}" y2="{Y(v):.1f}" stroke="#EEE" stroke-width=".2"/><text x="{L-1.5}" y="{Y(v)+1:.1f}" text-anchor="end" font-size="2.4" fill="#8A8A8A">{fmtm(v)}</text>')
+    pts = []
+    for i, x in enumerate(P):
+        cx, cy = X(i), Y(x['precio'])
+        pts.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="1.1" fill="#0D0D0D"/><text x="{cx:.1f}" y="{cy-2.2:.1f}" text-anchor="middle" font-size="2.6" font-weight="700" fill="#0D0D0D">{fmtm(x["precio"])}</text>')
+        if x.get('rec') and x['rec'] < x['precio'] - 0.05:
+            ry = Y(x['rec'])
+            pts.append(f'<circle cx="{cx:.1f}" cy="{ry:.1f}" r="1" fill="#fff" stroke="#B8860B" stroke-width=".5"/><text x="{cx:.1f}" y="{ry+3.6:.1f}" text-anchor="middle" font-size="2.3" fill="#8A6500">rec. {fmtm(x["rec"])}</text>')
+        lbl = 'Primer informe' if i == 0 else ('Hoy' if i == n - 1 else ordinal(i + 1) + ' revisión')
+        pts.append(f'<text x="{cx:.1f}" y="{H-4:.1f}" text-anchor="middle" font-size="2.5" fill="#595959">{lbl}</text><text x="{cx:.1f}" y="{H-1:.1f}" text-anchor="middle" font-size="2.3" fill="#8A8A8A">{fcorta(x["fecha"])}</text>')
+    return (f'<svg viewBox="0 0 {W} {H}" width="{W}mm" height="{H}mm" xmlns="http://www.w3.org/2000/svg" font-family="Bric">{"".join(g)}'
+            f'<polygon points="{band}" fill="#F5C643" fill-opacity=".45"/><polyline points="{line}" fill="none" stroke="#0D0D0D" stroke-width=".6"/>{"".join(pts)}</svg>')
+
+def fmtm(v): return f'{v:.1f}'.rstrip('0').rstrip('.').replace('.', ',') + ' M'
+
+def pagina_seguimiento(X_, c, titulo, num, hist, p, r, keep, lo, hi, m, dias):
+    """Página de las revisiones (2.ª, 3.ª…): lo que hizo OnCars por el carro y cómo ha evolucionado el precio."""
+    g = X_.get('gestion') or {}
+    hoy = {'fecha': X_['fecha'], 'precio': p, 'rec': None if keep else r, 'a25': lo, 'a75': hi, 'n': m['n']}
+    P = [h for h in hist if h and h.get('fecha') and h.get('a25')] + [hoy]
+    ult = P[-2] if len(P) > 1 else {}
+    desde = g.get('desde') or ult.get('fecha') or X_['fecha']
+    periodo = (_dt.date.fromisoformat(X_['fecha']) - _dt.date.fromisoformat(desde)).days
+    # tarjetas
+    def card(v, t, s=''): return f'<div class="kp"><b>{v}</b><span>{t}</span>{f"<i>{s}</i>" if s else ""}</div>'
+    cards = ''
+    if g:
+        cards = (card(g.get('interesados', 0), 'personas preguntaron por tu carro', f'en los últimos {periodo} días')
+                 + card(g.get('interesadosTotal', 0), 'interesados en total', 'desde que lo publicamos')
+                 + card(g.get('citasTotal', 0), 'citas y visitas agendadas', 'desde que lo publicamos')
+                 + card(dias, 'días en vitrina', f'desde el {fcorta(g["inicio"])}' if g.get('inicio') else ''))
+    acc = []
+    if g.get('canales'): acc.append(f"Tu carro está publicado en {', '.join(g['canales'][:-1])} y {g['canales'][-1]}." if len(g['canales']) > 1 else f"Tu carro está publicado en {g['canales'][0]}.")
+    if g.get('republicado'): acc.append(f"El {flarga(g['republicado'][:10])} lo republicamos en Mercado Libre para que vuelva a salir entre las publicaciones recientes.")
+    if g.get('interesadosTotal'):
+        acc.append(f"Le hicimos seguimiento por WhatsApp o llamada a {g.get('seguimiento', 0)} de las {g['interesadosTotal']} personas que han preguntado por tu carro." if g.get('seguimiento')
+                   else f"Atendimos a las {g['interesadosTotal']} personas que han preguntado por tu carro.")
+    if g and not g.get('interesados'):
+        acc.append('En estos días no llegaron interesados nuevos. Con carros comparables publicados a menor precio, el comprador suele escribirle primero a esos: por eso revisamos el precio contigo.' if not keep and p > hi
+                   else 'En estos días no llegaron interesados nuevos; seguimos impulsando la publicación y te avisamos en cuanto alguien pregunte.')
+    if ult.get('acordado') and ult.get('decisionFecha'):
+        acc.append(f"El {flarga(ult['decisionFecha'])} " + ('aceptaste el precio recomendado y lo publicamos en ' if ult.get('decision') == 'acepta' else 'nos pediste publicarlo en ' if ult.get('decision') == 'propone' else 'decidiste mantener el precio en ') + mill(ult['acordado']) + '; lo actualizamos en todos los canales.')
+    acc.append(f"Volvimos a revisar el mercado: hoy analizamos {m['n']} carros comparables publicados" + (f" (en la revisión anterior eran {ult['n']})." if ult.get('n') else '.'))
+    accs = ''.join(f'<li>{e(a)}</li>' for a in acc)
+    # lectura del precio en el tiempo
+    p0 = P[0]
+    lect = (f"Desde el primer informe, el {flarga(p0['fecha'])}, el rango competitivo pasó de {mill(p0['a25'])} – {mill(p0['a75'])} a {mill(lo)} – {mill(hi)}"
+            + (f", y tu precio de {mill(p0['precio'])} a {mill(p)}." if abs(p0['precio'] - p) >= 0.05 else f", y tu precio se ha mantenido en {mill(p)}."))
+    if p > hi + 0.05: lect += ' Hoy tu carro está por encima del rango donde se publica la mayoría de comparables.'
+    elif p >= lo: lect += ' Hoy tu carro está dentro del rango competitivo.'
+    else: lect += ' Hoy tu carro está por debajo de la mayoría de comparables.'
+    filas = ''.join(f"<tr><td>{'Primer informe' if i == 0 else ('Esta revisión' if i == len(P) - 1 else ordinal(i + 1) + ' revisión')}</td><td>{fcorta(x['fecha'])}</td>"
+                    f"<td class=n>{mill(x['precio'])}</td><td class=n>{mill(x['a25'])} – {mill(x['a75'])}</td><td class=n>{x.get('n') or '—'}</td>"
+                    f"<td class=n>{('Acordado ' + mill(x['acordado'])) if x.get('acordado') else ('Mantener' if not x.get('rec') else mill(x['rec']))}</td></tr>" for i, x in enumerate(P))
+    gest = (f"""<div class="sec" style="padding-top:7mm"><h2>LO QUE HICIMOS POR TU CARRO</h2><div class="kps">{cards}</div><ul class="why acc">{accs}</ul></div>""")
+    return f"""<div class="pg">
+<header class="sm"><img src="data:image/png;base64,{LOGO}"><div class="r"><b>{e(titulo.upper())}</b>{ordinal(num)} revisión · seguimiento de tu carro</div></header>
+{gest}
+<div class="sec"><h2>CÓMO HA EVOLUCIONADO EL PRECIO</h2><div class="tl">{linea_tiempo(P)}</div>
+<div class="leg"><i></i>Rango competitivo del mercado en cada revisión · <b style="color:#0D0D0D">●</b> tu precio publicado · <b style="color:#B8860B">○</b> precio recomendado</div>
+<p class="why" style="margin:3mm 0 2.5mm">{e(lect)}</p>
+<table><tr><th>Informe</th><th>Fecha</th><th class=n>Tu precio</th><th class=n>Rango competitivo</th><th class=n>Comparables</th><th class=n>Recomendación</th></tr>{filas}</table></div>
+<footer class="mini"><div>OnCars · {ordinal(num)} revisión del informe de precio · {e(titulo)}</div><div class="ct">Página 2 de 3</div></footer>
+</div>"""
+
 def pagina(X_):
     c = cars[X_['id']]; m = X_['mercado']; rec = X_['rec']; nuevos = X_['nuevos']; nota = X_['nota']; d = det.get(X_['id'], {})
     c = {**c, 'precio': round(X_['precio'] * 1e6), 'km': X_['km']}
     p = X_['precio']; dias = X_['dias']; upd = X_.get('tipo') == 'actualizacion'; prev = X_.get('previo') or {}
-    nv = sorted([(n, *N[n]) for n in nuevos], key=lambda x: x[1])
+    # (nombre, precio de referencia, oficial, 0 km en Mercado Libre); la referencia es el oficial, o el de ML si la marca no publica
+    nv = sorted([(q[0], q[1] or q[2], q[1], q[2]) for q in (_pnuevo(n) for n in nuevos) if q], key=lambda x: x[1])
+    num = X_.get('numero') or (len(X_.get('historial') or []) + 1 if upd else 1)
+    hist = list(X_.get('historial') or ([prev] if upd and prev else []))
     keep = rec is None or rec >= p
     r = p if keep else rec
     lo, hi = m['a25'], m['a75']
@@ -50,13 +136,14 @@ def pagina(X_):
 <div class="mk cur" style="left:{X(pa):.1f}%"><span>{'Precio acordado' if ac else 'Precio actual'}<br><b>{mill(pa)}</b></span></div>"""
     if not keep and not (ac and abs(r - pa) < 0.05):
         marks += f'<div class="mk rec" style="left:{X(r):.1f}%"><span>Recomendado<br><b>{mill(r)}</b></span></div>'
-    nmin = nv[0]
-    xn = X(nmin[1]); top_clash = abs(xn - X(pa)) < 20
-    bot_clash = (not keep) and abs(xn - X(r)) < 20
-    pos = 'top:-8.2mm' if not top_clash else ('top:8.6mm' if not bot_clash else 'top:16.5mm')
-    marks += f'<div class="mk new" style="left:{xn:.1f}%"><span style="{pos}">Nuevo desde<br><b>{mill(nmin[1])}</b></span></div>'
-    comps = ''.join(f"<tr><td>{e(x[4])}</td><td>{km(x[1])}</td><td>{e(x[3])}</td><td class=n>{mill(x[2])}</td></tr>" for x in m['c'][:(4 if upd else 6)])
-    news = ''.join(f"<tr><td>{e(n)}</td><td class=n>{mill(v)}</td><td class=s>{SRC[s]}</td></tr>" for n, v, s in nv)
+    if nv:
+        nmin = nv[0]
+        xn = X(nmin[1]); top_clash = abs(xn - X(pa)) < 20
+        bot_clash = (not keep) and abs(xn - X(r)) < 20
+        pos = 'top:-8.2mm' if not top_clash else ('top:8.6mm' if not bot_clash else 'top:16.5mm')
+        marks += f'<div class="mk new" style="left:{xn:.1f}%"><span style="{pos}">Nuevo desde<br><b>{mill(nmin[1])}</b></span></div>'
+    comps = ''.join(f"<tr><td>{e(x[4])}</td><td>{km(x[1])}</td><td>{e(x[3])}</td><td class=n>{mill(x[2])}</td></tr>" for x in m['c'][:6])
+    news = ''.join(f"<tr><td>{e(n)}</td><td class=n>{mill(of) if of else '<span class=s>No publica</span>'}</td><td class=n>{mill(ml) if ml else '<span class=s>Sin publicaciones</span>'}</td></tr>" for n, v, of, ml in nv)
     if keep:
         verdict = f"""<div class="verdict ok"><div class="lbl">Recomendación</div><div class="big">Mantener {mill(p)}</div>
 <div class="sub">{('Tu precio ya está por debajo de la mayoría de carros comparables: hoy el precio no es lo que frena la venta.' if p < lo else 'El precio está dentro del rango competitivo del mercado.')}</div></div>"""
@@ -74,22 +161,7 @@ def pagina(X_):
     version = d.get('v') or re.sub(re.escape(_det.nombre(c)), '', c['modelo'].replace('Clase ',''), flags=re.I).strip(' -')
     version = ' '.join(CASE.get(t.lower(), t) for t in version.split())
     info = ' · '.join(x for x in [version, km(c['km']), c.get('trans', ''), c.get('comb', ''), d.get('tr', '') and ('Tracción ' + d['tr'].lower() if d.get('tr') not in ('Delantera',) else 'Tracción delantera')] if x)
-    cambio = ''
-    if upd and prev:
-        pr = prev.get('rec') or prev.get('precio')
-        dc = X_.get('decision') or {}
-        dtxt = ''
-        if dc.get('tipo') in ('acepta', 'propone') and dc.get('precio'):
-            dtxt = (f"El {flarga(dc['fecha'][:10])} nos pediste publicarlo en {mill(dc['precio']/1e6)}"
-                    + (f" (el recomendado era {mill(dc['recomendado']/1e6)})" if dc.get('tipo') == 'propone' and dc.get('recomendado') else '') + '.')
-        elif dc.get('tipo') == 'mantiene':
-            dtxt = f"El {flarga(dc['fecha'][:10])} decidiste mantener el precio en {mill(dc['precio']/1e6)}."
-        dhtml = f'<p class="why" style="margin:0 0 2.5mm">{e(dtxt)} Esto es lo que ha pasado en el mercado desde entonces:</p>' if dtxt else ''
-        cambio = f"""<div class="sec"><div class="chg"><h2>QUÉ CAMBIÓ DESDE EL INFORME DEL {flarga(prev['fecha']).upper()}</h2>{dhtml}<table><tr><th></th><th class=n>Antes</th><th class=n>Hoy</th></tr>
-<tr><td>Precio publicado</td><td class=n>{mill(prev['precio'])}</td><td class=n>{mill(p)}</td></tr>
-<tr><td>Rango competitivo del mercado</td><td class=n>{mill(prev['a25'])} – {mill(prev['a75'])}</td><td class=n>{mill(lo)} – {mill(hi)}</td></tr>
-<tr><td>Carros comparables publicados</td><td class=n>{prev.get('n','—')}</td><td class=n>{m['n']}</td></tr>
-<tr><td>Recomendación</td><td class=n>{'Mantener' if not prev.get('rec') else mill(prev['rec'])}</td><td class=n>{'Mantener' if keep else mill(r)}</td></tr></table></div></div>"""
+    seguimiento = pagina_seguimiento(X_, c, titulo, num, hist, p, r, keep, lo, hi, m, dias) if upd else ''
     ref = X_['id']
     base = f"Hola, soy el dueño del {titulo} (ref. {ref})."
     codigo = lambda tipo, v: f"\n\nCódigo OnCars: {ref}|{tipo}|{round(v * 1e6)}"
@@ -113,6 +185,7 @@ def pagina(X_):
         cambiar = 'https://oncarsco.com/informes/responder.html?' + urllib.parse.urlencode({'t': titulo, 'r': ref, 'rec': 0, 'act': round(pa * 1e6)})
         decide = f"""<div class="sec"><div class="dec"><h2>REGISTRO DE TU DECISIÓN</h2><table>{tr}</table>
 <p class="why" style="margin:3mm 0">{e(pos_txt)}</p><div class="btns"><a class="b2" href="{e(cambiar)}">Quiero cambiar el precio</a></div></div></div>"""
+    npag = 3 if upd else 2
     sig = 'Algunos buscan simplemente un carro, pero otros, buscan tomar decisiones inteligentes. Si ese es tu caso, hablemos.'
     return f"""<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><style>{FONTS}
 @page{{size:A4;margin:0}}*{{box-sizing:border-box}}body{{margin:0;font:10.5pt/1.45 Bric,sans-serif;color:#0D0D0D;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
@@ -143,9 +216,11 @@ td{{padding:1.4mm 1.5mm;border-bottom:.2mm solid #E6E6E6}}td.n,th.n{{text-align:
 footer{{position:absolute;bottom:0;left:0;right:0;background:#0D0D0D;color:#BFBFBF;padding:5mm 14mm;font-size:8pt;display:flex;justify-content:space-between;align-items:center;gap:8mm}}
 footer.mini{{padding:3mm 14mm;font-size:7.5pt}}header.sm{{padding:7mm 14mm 6mm}}header.sm img{{height:10mm}}footer .sig{{color:#fff;font-size:9pt;max-width:120mm}}footer .ct{{text-align:right;white-space:nowrap}}footer .ct b{{color:#F5C643}}
 .dec{{border:.4mm solid #F5C643;border-radius:3mm;padding:4mm 5mm;background:#FFFBEA}}.btns{{display:flex;gap:4mm}}.btns a{{flex:1;display:block;text-align:center;text-decoration:none;border-radius:2mm;padding:3mm 2mm;font:8.5pt Mich;letter-spacing:.3px}}.b1{{background:#0D0D0D;color:#F5C643}}.b2{{background:#fff;color:#0D0D0D;border:.4mm solid #0D0D0D}}
-.chg{{border:.3mm solid #D9D9D9;border-radius:3mm;padding:4mm 5mm}}.method{{position:absolute;bottom:22mm;left:14mm;right:14mm;font-size:7.2pt;color:#7A7A7A;line-height:1.35}}
+.chg{{border:.3mm solid #D9D9D9;border-radius:3mm;padding:4mm 5mm}}
+.kps{{display:flex;gap:3mm;margin:1mm 0 4mm}}.kp{{flex:1;background:#0D0D0D;color:#fff;border-radius:2.5mm;padding:3.5mm 3.5mm 3mm}}.kp b{{display:block;font:20pt/1 Mich;color:#F5C643;margin-bottom:1.5mm}}.kp span{{display:block;font-size:8.3pt;line-height:1.25}}.kp i{{display:block;font-style:normal;font-size:7.3pt;color:#BFBFBF;margin-top:1mm}}
+.acc li{{margin-bottom:1.6mm}}.tl{{margin:1mm 0 0}}.method{{position:absolute;bottom:22mm;left:14mm;right:14mm;font-size:7.2pt;color:#7A7A7A;line-height:1.35}}
 </style></head><body><div class="pg">
-<header><img src="data:image/png;base64,{LOGO}"><div class="r"><b>{('VERSIÓN CORREGIDA · ' if ac else '') + ('ACTUALIZACIÓN DEL INFORME DE PRECIO' if upd else ('INFORME DE PRECIO' if ac else 'INFORME DE PRECIO DE MERCADO'))}</b>Medellín, {flarga(ac['fecha'][:10] if ac else X_['fecha'])}</div></header>
+<header><img src="data:image/png;base64,{LOGO}"><div class="r"><b>{('VERSIÓN CORREGIDA · ' if ac else '') + (ordinal(num).upper() + ' REVISIÓN DEL INFORME DE PRECIO' if upd else ('INFORME DE PRECIO' if ac else 'INFORME DE PRECIO DE MERCADO'))}</b>Medellín, {flarga(ac['fecha'][:10] if ac else X_['fecha'])}</div></header>
 <div class="car"><h1>{e(titulo)}</h1><div class="meta">{e(info)}</div></div>
 <div class="row">{verdict}
 <div class="facts"><div><span>{'Precio antes del acuerdo' if ac else 'Precio publicado hoy'}</span><b>{mill(p)}</b></div>
@@ -155,15 +230,15 @@ footer.mini{{padding:3mm 14mm;font-size:7.5pt}}header.sm{{padding:7mm 14mm 6mm}}
 <div class="sec"><h2>DÓNDE ESTÁ TU CARRO FRENTE AL MERCADO</h2>
 <div class="scale"><div class="axis"></div>{marks}</div>
 <div class="leg"><i></i>Rango donde se publica la mitad central de los carros comparables, ajustados al año y kilometraje de tu carro.</div></div>
-{cambio}<div class="sec"><p class="note">{e(nota)}</p></div>
+<div class="sec"><p class="note">{e(nota)}</p></div>
 <div class="sec two"><div><h2>CARROS SIMILARES EN VENTA HOY</h2>
 <table><tr><th>Versión</th><th>Recorrido</th><th>Ciudad</th><th class=n>Precio</th></tr>{comps}</table></div></div>
-<footer class="mini"><div>OnCars · {'Actualización del informe' if upd else 'Informe'} de precio · {e(titulo)}</div><div class="ct">Página 1 de 2</div></footer>
-</div><div class="pg">
+<footer class="mini"><div>OnCars · {(ordinal(num) + ' revisión del informe') if upd else 'Informe'} de precio · {e(titulo)}</div><div class="ct">Página 1 de {npag}</div></footer>
+</div>{seguimiento}<div class="pg">
 <header class="sm"><img src="data:image/png;base64,{LOGO}"><div class="r"><b>{e(titulo.upper())}</b>Continuación del informe</div></header>
 <div class="sec" style="padding-top:8mm"><h2>CARROS NUEVOS QUE COMPITEN EN ESE PRESUPUESTO</h2>
-<p class="why" style="margin:0 0 3mm">Con lo que cuesta tu carro, el comprador también puede mirar estos modelos nuevos. Por eso un usado necesita quedar claramente por debajo, compensando con equipamiento, versión o tamaño.</p>
-<table><tr><th>Modelo</th><th class=n>Precio desde</th><th>Fuente</th></tr>{news}</table></div>
+<p class="why" style="margin:0 0 3mm">Con lo que cuesta tu carro, el comprador también puede mirar estos modelos nuevos. Por eso un usado necesita quedar claramente por debajo, compensando con equipamiento, versión o tamaño. Mostramos dos referencias: el precio oficial que publica cada marca en su página y el carro 0 km más barato de esa versión que ofrecen los concesionarios en Mercado Libre.</p>
+<table><tr><th>Modelo</th><th class=n>Precio oficial de la marca</th><th class=n>0 km en Mercado Libre</th></tr>{news}</table></div>
 <div class="sec"><h2>POR QUÉ IMPORTA EL PRECIO</h2><ul class="why">
 <li>El comprador de hoy compara tu carro con decenas de publicaciones iguales y también con carros nuevos con garantía de fábrica, que hoy llegan con precios muy competitivos.</li>
 <li>Los carros publicados dentro del rango competitivo reciben más contactos y se venden en menos tiempo; los que están arriba del rango acumulan días y terminan negociándose más abajo.</li></ul></div>
@@ -171,7 +246,7 @@ footer.mini{{padding:3mm 14mm;font-size:7.5pt}}header.sm{{padding:7mm 14mm 6mm}}
 <li>{('Mientras tanto reforzamos la exposición: pauta con el catálogo de Meta, contenido en redes y seguimiento a cada persona que pregunte.' if keep else 'Mientras tanto seguimos impulsando la publicación en todos nuestros canales.')}</li>
 {'' if ac else '<li>En dos semanas volvemos a revisar el mercado y te enviamos una actualización de este informe.</li>'}
 <li>Cualquier duda sobre este informe la resolvemos contigo por WhatsApp o llamada.</li></ul></div>
-<div class="method">Metodología: publicaciones activas en Mercado Libre Colombia consultadas el {flarga(X_['fecha'])}, del mismo modelo y versión, con un año de diferencia como máximo. Cada precio se ajustó al año y kilometraje de tu carro para poder compararlos. Son precios de publicación, no de cierre: en la negociación suelen bajar. Los precios de carros nuevos son precios de lista publicados por las marcas o por concesionarios y pueden variar por versión, promociones y fecha.</div>
+<div class="method">Metodología: publicaciones activas en Mercado Libre Colombia consultadas el {flarga(X_['fecha'])}, del mismo modelo y versión, con un año de diferencia como máximo. Cada precio se ajustó al año y kilometraje de tu carro para poder compararlos. Son precios de publicación, no de cierre: en la negociación suelen bajar. Carros nuevos: precio oficial "desde" publicado en la página de cada marca en Colombia ({FECHA['oficial']}) y publicación 0 km más barata de esa versión en Mercado Libre ({FECHA['ml']}); pueden variar por versión, bonos, promociones y fecha.</div>
 <footer><div class="sig">{sig}</div><div class="ct">OnCars · Concesionario virtual<br><b>316 627 9204</b> · oncarsco.com</div></footer>
 </div></body></html>"""
 
@@ -201,7 +276,7 @@ def generar(path):
     m = X_['mercado']
     return {'carId': X_['id'], 'url': 'https://oncarsco.com/informes/' + X_['token'] + '/' + name.replace(' ', '%20'), 'archivo': name,
             'fecha': X_['fecha'], 'tipo': X_.get('tipo', 'inicial'), 'precio': round(X_['precio'] * 1e6), 'rec': round(X_['rec'] * 1e6) if X_['rec'] else None,
-            'a25': round(m['a25'] * 1e6), 'a75': round(m['a75'] * 1e6), 'n': m['n'], 'clave': X_['clave'], 'corregido': (X_.get('acuerdo') or {}).get('fecha'), 'ok': ok}
+            'a25': round(m['a25'] * 1e6), 'a75': round(m['a75'] * 1e6), 'n': m['n'], 'clave': X_['clave'], 'corregido': (X_.get('acuerdo') or {}).get('fecha'), 'numero': X_.get('numero') or 1, 'ok': ok}
 
 if __name__ == '__main__':
     # Uso: python3 _informes/generar.py [MCO-xxx ...]   (sin argumentos: todos los de _informes/datos)

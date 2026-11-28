@@ -1,7 +1,7 @@
 # Los datos de cada informe NO se guardan en este repositorio (es público). Viven en OnCars OS, colección informes,
 # campo "semilla". Este script los pasa de OnCars OS a archivos locales y de vuelta.
 #   python3 _informes/semilla.py importar informes.json   (informes.json = lista de documentos {id, data} leídos de OnCars OS)
-#   python3 _informes/semilla.py exportar MCO-xxx ...      (imprime {id: {url, archivo, fecha, tipo, precio, rec, a25, a75, n, clave, corregido, semilla}})
+#   python3 _informes/semilla.py exportar MCO-xxx ...      (imprime {id: {url, archivo, fecha, tipo, precio, rec, a25, a75, n, clave, corregido, numero, semilla}})
 # Carpeta de trabajo: variable INF_DATOS (por defecto _informes/datos/, que está en .gitignore).
 import json, os, sys
 B = os.path.dirname(os.path.abspath(__file__)) + '/'
@@ -21,6 +21,6 @@ else:
     idx = json.load(open(D + 'indice.json')); out = {}
     for i in sys.argv[2:]:
         d = json.load(open(D + i + '.json')); r = idx[i]
-        out[i] = {k: r.get(k) for k in ('url', 'archivo', 'fecha', 'tipo', 'precio', 'rec', 'a25', 'a75', 'n', 'clave', 'corregido')}
+        out[i] = {k: r.get(k) for k in ('url', 'archivo', 'fecha', 'tipo', 'precio', 'rec', 'a25', 'a75', 'n', 'clave', 'corregido', 'numero')}
         out[i]['semilla'] = {k: v for k, v in d.items() if k not in ('id', 'decision')}  # todo el análisis (privado: solo en OnCars OS)
     print(json.dumps(out, ensure_ascii=False))
